@@ -1,0 +1,164 @@
+Cmp-Mod V01 Created by PcbNew date = 9/4/2013 6:40:11 PM
+
+BeginCmp
+TimeStamp = /52150FDD;
+Reference = C1;
+ValeurCmp = 0.1 uF;
+IdModule  = c_0805_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /52150FEA;
+Reference = C2;
+ValeurCmp = 0.1 uF;
+IdModule  = c_0805_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5227A21B;
+Reference = C3;
+ValeurCmp = 0.1 uF;
+IdModule  = c_0805_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5213FE26;
+Reference = C5;
+ValeurCmp = 0.1 uF;
+IdModule  = c_0805_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5214D5C6;
+Reference = C6;
+ValeurCmp = 0.1 uF;
+IdModule  = c_0805_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /52150E25;
+Reference = IC1;
+ValeurCmp = ATMEGA328-A;
+IdModule  = TQFP32_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5213FDDC;
+Reference = P1;
+ValeurCmp = CONN_2;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /5213FCAA;
+Reference = P2;
+ValeurCmp = CONN_3X2;
+IdModule  = pin_array_3x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /521667C3;
+Reference = P3;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /52166855;
+Reference = P4;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /521667D0;
+Reference = P5;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5216685B;
+Reference = P6;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5227A241;
+Reference = P7;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5227A247;
+Reference = P8;
+ValeurCmp = CONN_8X2;
+IdModule  = pin_array_8x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /5214E00C;
+Reference = R1;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5214D2EE;
+Reference = R2;
+ValeurCmp = 10K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5213FE52;
+Reference = R3;
+ValeurCmp = 2.2K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5214D5CC;
+Reference = R4;
+ValeurCmp = 2.2K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5227A221;
+Reference = R5;
+ValeurCmp = 2.2K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /5213F559;
+Reference = U1;
+ValeurCmp = TLC5941;
+IdModule  = TLC5940_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5214D5C0;
+Reference = U2;
+ValeurCmp = TLC5941;
+IdModule  = TLC5940_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /5227A23B;
+Reference = U3;
+ValeurCmp = TLC5941;
+IdModule  = TLC5940_FIXED;
+EndCmp
+
+BeginCmp
+TimeStamp = /52166DFA;
+Reference = Y1;
+ValeurCmp = RESONATEUR;
+IdModule  = crystal_smd;
+EndCmp
+
+EndListe

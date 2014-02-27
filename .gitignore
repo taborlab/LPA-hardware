@@ -1,0 +1,12 @@
+board/*.db
+board/*.000
+board/*.bak
+board/*.bck
+board/*.lst
+board/*.net
+board/*.dsn
+board/*.ses
+
+firmware/Debug/
+
+desktop.ini
