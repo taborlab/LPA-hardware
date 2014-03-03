@@ -124,7 +124,6 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
-      <Value>F_CPU=16000000UL</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.directories.IncludePaths>
@@ -169,6 +168,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="firmware.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Tlc5941.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
