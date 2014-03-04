@@ -145,7 +145,8 @@ ISR(TIMER0_COMPA_vect) {
 			xlatNeedsPulse = 0;
 		}
 		Tlc5941_pulse(Tlc5941_SCLK_PORT, Tlc5941_SCLK_PIN);
-		} else if (xlatNeedsPulse) {
+	} 
+	else if (xlatNeedsPulse) {
 		Tlc5941_pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
 		xlatNeedsPulse = 0;
 	}
