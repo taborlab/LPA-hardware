@@ -5,7 +5,7 @@
  *  Author: Sebastian Castillo
  */ 
 
-#include "config.h"
+//#include "config.h"
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -32,8 +32,8 @@ int main(void) {
 	Tlc5941_Init();
 	
 	// The following two lines are optional
-	//Tlc5941_SetAllDC(63);
-	//Tlc5941_ClockInDC();
+	Tlc5941_SetAllDC(63);
+	Tlc5941_ClockInDC();
 	
 	// Default all channels to off
 	Tlc5941_SetAllGS(0);

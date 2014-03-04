@@ -16,19 +16,19 @@ volatile uint8_t Tlc5941_gsUpdateFlag;
 
 void Tlc5941_Init(void) {
 	// Define direction of pins
-	setOutput(Tlc5941_GSCLK_DDR, Tlc5941_GSCLK_PIN);
-	setOutput(Tlc5941_SCLK_DDR, Tlc5941_SCLK_PIN);
-	setOutput(Tlc5941_MODE_DDR, Tlc5941_MODE_PIN);
-	setOutput(Tlc5941_XLAT_DDR, Tlc5941_XLAT_PIN);
-	setOutput(Tlc5941_BLANK_DDR, Tlc5941_BLANK_PIN);
-	setOutput(Tlc5941_SIN_DDR, Tlc5941_SIN_PIN);
+	Tlc5941_setOutput(Tlc5941_GSCLK_DDR, Tlc5941_GSCLK_PIN);
+	Tlc5941_setOutput(Tlc5941_SCLK_DDR, Tlc5941_SCLK_PIN);
+	Tlc5941_setOutput(Tlc5941_MODE_DDR, Tlc5941_MODE_PIN);
+	Tlc5941_setOutput(Tlc5941_XLAT_DDR, Tlc5941_XLAT_PIN);
+	Tlc5941_setOutput(Tlc5941_BLANK_DDR, Tlc5941_BLANK_PIN);
+	Tlc5941_setOutput(Tlc5941_SIN_DDR, Tlc5941_SIN_PIN);
 	
 	// Set initial values of pins
-	setLow(Tlc5941_GSCLK_PORT, Tlc5941_GSCLK_PIN);
-	setLow(Tlc5941_SCLK_PORT, Tlc5941_SCLK_PIN);
-	setHigh(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
-	setLow(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
-	setHigh(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
+	Tlc5941_setLow(Tlc5941_GSCLK_PORT, Tlc5941_GSCLK_PIN);
+	Tlc5941_setLow(Tlc5941_SCLK_PORT, Tlc5941_SCLK_PIN);
+	Tlc5941_setHigh(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
+	Tlc5941_setLow(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
+	Tlc5941_setHigh(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
 	
 	// SPI configuration
 	// Enable SPI, Master, set clock rate fck/2
@@ -79,7 +79,7 @@ void Tlc5941_SetGS(Tlc5941_channel_t channel, uint16_t value) {
 #if (Tlc5941_MANUAL_DC_FUNCS)
 void Tlc5941_ClockInDC(void) {
 	// Change programming mode
-	setHigh(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
+	Tlc5941_setHigh(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
 
 	// Perform data transmission
 	for (Tlc5941_dcData_t i = 0; i < Tlc5941_dcDataSize; i++) {
@@ -88,7 +88,7 @@ void Tlc5941_ClockInDC(void) {
 		// Wait for transmission complete
 		while (!(SPSR & (1 << SPIF)));
 	}
-	pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
+	Tlc5941_pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
 }
 
 void Tlc5941_SetAllDC(uint8_t value) {
@@ -136,21 +136,21 @@ ISR(TIMER0_COMPA_vect) {
 	static uint8_t xlatNeedsPulse = 0;
 	
 	// Make the TLC load new values
-	setHigh(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
+	Tlc5941_setHigh(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
 	
-	if (outputState(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN)) {
-		setLow(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
+	if (Tlc5941_outputState(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN)) {
+		Tlc5941_setLow(Tlc5941_MODE_PORT, Tlc5941_MODE_PIN);
 		if (xlatNeedsPulse) {
-			pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
+			Tlc5941_pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
 			xlatNeedsPulse = 0;
 		}
-		pulse(Tlc5941_SCLK_PORT, Tlc5941_SCLK_PIN);
+		Tlc5941_pulse(Tlc5941_SCLK_PORT, Tlc5941_SCLK_PIN);
 		} else if (xlatNeedsPulse) {
-		pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
+		Tlc5941_pulse(Tlc5941_XLAT_PORT, Tlc5941_XLAT_PIN);
 		xlatNeedsPulse = 0;
 	}
 	
-	setLow(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
+	Tlc5941_setLow(Tlc5941_BLANK_PORT, Tlc5941_BLANK_PIN);
 	
 	// Send grayscale data only if gsUpdateFlag is set
 	if (Tlc5941_gsUpdateFlag) {

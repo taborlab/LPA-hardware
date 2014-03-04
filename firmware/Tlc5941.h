@@ -83,14 +83,14 @@
 #endif
 
 // Convenience functions
-#define setOutput(ddr, pin) ((ddr) |= (1 << (pin)))
-#define setLow(port, pin) ((port) &= ~(1 << (pin)))
-#define setHigh(port, pin) ((port) |= (1 << (pin)))
-#define pulse(port, pin) do { \
-	setHigh((port), (pin)); \
-	setLow((port), (pin)); \
+#define Tlc5941_setOutput(ddr, pin) ((ddr) |= (1 << (pin)))
+#define Tlc5941_setLow(port, pin) ((port) &= ~(1 << (pin)))
+#define Tlc5941_setHigh(port, pin) ((port) |= (1 << (pin)))
+#define Tlc5941_pulse(port, pin) do { \
+	Tlc5941_setHigh((port), (pin)); \
+	Tlc5941_setLow((port), (pin)); \
 } while (0)
-#define outputState(port, pin) ((port) & (1 << (pin)))
+#define Tlc5941_outputState(port, pin) ((port) & (1 << (pin)))
 
 // Calculate appropriate data type for size of the dcData array
 #if (12 * Tlc5941_N > 255)
