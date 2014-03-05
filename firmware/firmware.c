@@ -10,7 +10,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include "Tlc5941.h"
+#include "Tlc5941/Tlc5941.h"
 
 int main(void) {
 	// Initialize variables for demo
