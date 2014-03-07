@@ -9,4 +9,7 @@ board/*.ses
 
 firmware/Debug/
 
+*.atsuo
+*.atsln
+
 desktop.ini
