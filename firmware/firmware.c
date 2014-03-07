@@ -12,6 +12,23 @@
 
 #include "Tlc5941/Tlc5941.h"
 
+/*ISR(TIMER5_COMPA_vect) {
+	static uint16_t count = 0; // milliseconds
+	// Period
+	if (count == 500)
+	{
+		OdLaser_TurnOn();
+	}
+	else if (count == 1000)
+	{
+		OdLaser_TurnOff();
+	}
+	// Increment counter
+	count ++;
+	if (count == 1000)
+		count = 0;
+}*/
+
 int main(void) {
 	// Initialize variables for demo
 	uint16_t wave[10][10] = 
@@ -30,6 +47,16 @@ int main(void) {
 	
 	// Initialize pins for TLC
 	Tlc5941_Init();
+    
+    /*// Initialize Timer 5 to generate an interruption every millisecond
+	// Mode: CTC, WGM5 = 0b0100
+	TCCR5B = (1 << WGM52);
+	// Clock: no prescaling
+	TCCR5B |= (1 << CS50);
+	// Compare value: 0x3E7F
+	OCR5A = 0x3E7F;
+	// Enable compare interrupt
+	TIMSK5 = (1 << OCIE5A);*/
 	
 	// The following two lines are optional
 	Tlc5941_SetAllDC(63);
