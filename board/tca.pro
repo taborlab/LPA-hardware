@@ -1,4 +1,4 @@
-update=9/4/2013 4:37:57 PM
+update=30/04/2014 10:58:42 AM
 last_client=pcbnew
 [general]
 version=1
@@ -49,12 +49,12 @@ NetIExt=net
 EquName1=devcms
 [pcbnew]
 version=1
-LastNetListRead=tca_v1p0.net
+LastNetListRead=tca.net
 UseCmpFile=1
 PadDrill=0.000000000000
 PadDrillOvalY=0.000000000000
-PadSizeH=9.700000000000
-PadSizeV=3.400000000000
+PadSizeH=1.550000000000
+PadSizeV=1.300000000000
 PcbTextSizeV=1.500000000000
 PcbTextSizeH=1.500000000000
 PcbTextThickness=0.300000000000

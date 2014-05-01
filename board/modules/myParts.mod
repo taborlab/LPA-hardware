@@ -1,7 +1,10 @@
-PCBNEW-LibModule-V1  9/4/2013 6:38:43 PM
+PCBNEW-LibModule-V1  01/05/2014 11:42:02 AM
 # encoding utf-8
 Units mm
 $INDEX
+DF1B_8x2
+SD_CONN
+SW_PUSH_SMD
 TLC5940
 TLC5940_FIXED
 TQFP32_FIXED
@@ -10,6 +13,299 @@ c_0805_FIXED
 crystal_smd
 hole_ansi_6
 $EndINDEX
+$MODULE DF1B_8x2
+Po 0 0 0 15 53436E94 00000000 ~~
+Li DF1B_8x2
+Sc 0
+AR 
+Op 0 0 0
+T0 0 -3.25 1 1 0 0.15 N V 21 N "DF1B_8x2"
+T1 0 3.75 1 1 0 0.15 N V 21 N "VAL**"
+DS 11.25 4.25 11.25 -4.25 0.15 21
+DS 11.25 -4.25 -11.25 -4.25 0.15 21
+DS -11.25 -4.25 -11.25 4.25 0.15 21
+DS -11.25 4.25 11.25 4.25 0.15 21
+$PAD
+Sh "15" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -8.75 1.25
+$EndPAD
+$PAD
+Sh "16" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -8.75 -1.25
+$EndPAD
+$PAD
+Sh "13" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -6.25 1.25
+$EndPAD
+$PAD
+Sh "14" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -6.25 -1.25
+$EndPAD
+$PAD
+Sh "11" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -3.75 1.25
+$EndPAD
+$PAD
+Sh "12" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -3.75 -1.25
+$EndPAD
+$PAD
+Sh "9" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1.25 1.25
+$EndPAD
+$PAD
+Sh "10" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1.25 -1.25
+$EndPAD
+$PAD
+Sh "7" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1.25 1.25
+$EndPAD
+$PAD
+Sh "8" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1.25 -1.25
+$EndPAD
+$PAD
+Sh "5" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 3.75 1.25
+$EndPAD
+$PAD
+Sh "6" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 3.75 -1.25
+$EndPAD
+$PAD
+Sh "3" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 6.25 1.25
+$EndPAD
+$PAD
+Sh "4" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 6.25 -1.25
+$EndPAD
+$PAD
+Sh "1" R 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 8.75 1.25
+$EndPAD
+$PAD
+Sh "2" C 1.5 1.5 0 0 0
+Dr 1.1 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 8.75 -1.25
+$EndPAD
+$EndMODULE DF1B_8x2
+$MODULE SD_CONN
+Po 0 0 0 15 53627957 00000000 ~~
+Li SD_CONN
+Sc 0
+AR /5358AEF9
+Op 0 0 0
+T0 -5 -1 1 1 0 0.15 N V 21 N "U4"
+T1 -5 1.5 1 1 0 0.15 N V 21 N "SD_CARD"
+T2 -17 1 1 1 900 0.15 N V 21 N "TRACE KEEP OUT"
+DS -24 -14.5 -24 15 0.15 21
+DS -24 15 3 15 0.15 21
+DS 3 15 3 -14.5 0.15 21
+DS 3 -14.5 -24 -14.5 0.15 21
+DS -13 12 -15 12 0.15 21
+DS -15 -9.5 -13 -9.5 0.15 21
+DS -19 -9.5 -19 12 0.15 21
+DS -19 12 -15 12 0.15 21
+DS -13 12 -13 -9 0.15 21
+DS -13 -9 -13 -9.5 0.15 21
+DS -15 -9.5 -19 -9.5 0.15 21
+$PAD
+Sh "1" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 1 "/SD_CS"
+Po -24.31 -6.1
+$EndPAD
+$PAD
+Sh "2" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 2 "/SD_DataIn"
+Po -24.31 -3.6
+$EndPAD
+$PAD
+Sh "3" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 6 "GND"
+Po -24.31 -0.2
+$EndPAD
+$PAD
+Sh "4" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 5 "/VSD"
+Po -24.31 1.45
+$EndPAD
+$PAD
+Sh "5" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 4 "/SD_SCLK"
+Po -24.31 3.9
+$EndPAD
+$PAD
+Sh "6" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 6 "GND"
+Po -24.31 6.4
+$EndPAD
+$PAD
+Sh "7" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 3 "/SD_DataOut"
+Po -24.31 8.83
+$EndPAD
+$PAD
+Sh "8" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -24.31 10.53
+$EndPAD
+$PAD
+Sh "9" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -24.31 -8.6
+$EndPAD
+$PAD
+Sh "WP" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -24.31 13.88
+$EndPAD
+$PAD
+Sh "GND" R 2 1.2 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -2.1 14.4
+$EndPAD
+$PAD
+Sh "GND" R 2 1.2 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -3.3 -13.6
+$EndPAD
+$PAD
+Sh "CD" R 1.5 1 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -24.31 -1.9
+$EndPAD
+$PAD
+Sh "H" C 1.6 1.6 0 0 0
+Dr 1.5 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 0 -11.3
+$EndPAD
+$PAD
+Sh "H" C 1.6 1.6 0 0 0
+Dr 1.5 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 0 12.85
+$EndPAD
+$EndMODULE SD_CONN
+$MODULE SW_PUSH_SMD
+Po 0 0 0 15 53611933 00000000 ~~
+Li SW_PUSH_SMD
+Sc 0
+AR 
+Op 0 0 0
+T0 0 -3.5 1 1 0 0.15 N V 21 N "SW_PUSH_SMD"
+T1 0 4 1 1 0 0.15 N V 21 N "VAL**"
+DC 0 0 1.75 0 0.15 21
+DS -3 -3 -3 3 0.15 21
+DS -3 3 3 3 0.15 21
+DS 3 3 3 -3 0.15 21
+DS 3 -3 -3 -3 0.15 21
+$PAD
+Sh "1" R 1.55 1.3 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po 3.975 -2.25
+$EndPAD
+$PAD
+Sh "2" R 1.55 1.3 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po 3.975 2.25
+$EndPAD
+$PAD
+Sh "2" R 1.55 1.3 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -3.975 2.25
+$EndPAD
+$PAD
+Sh "1" R 1.55 1.3 0 0 0
+Dr 0 0 0
+At SMD N 00888000
+Ne 0 ""
+Po -3.975 -2.25
+$EndPAD
+$EndMODULE SW_PUSH_SMD
 $MODULE TLC5940
 Po 0 0 0 15 5227A94A 00000000 ~~
 Li TLC5940
