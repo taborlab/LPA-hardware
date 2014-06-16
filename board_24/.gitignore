@@ -1,0 +1,11 @@
+*.000
+*.bak
+*.bck
+*.lst
+*.net
+*.dsn
+*.ses
+*.kicad_pcb-bak
+libraries/*.bak
+libraries/*.bck
+output/

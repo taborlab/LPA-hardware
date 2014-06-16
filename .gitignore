@@ -1,13 +1,3 @@
-board_24/*.db
-board_24/*.000
-board_24/*.bak
-board_24/*.bck
-board_24/libraries/*.bak
-board_24/libraries/*.bck
-board_24/*.dsn
-board_24/*.ses
-board_24/*.kicad_pcb-bak
-
 firmware/Debug/
 
 *.atsuo
