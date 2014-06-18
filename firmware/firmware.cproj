@@ -172,6 +172,12 @@
     <Compile Include="firmware.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="StatusLeds\StatusLeds.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="StatusLeds\StatusLeds.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Tlc5941\Tlc5941.c">
       <SubType>compile</SubType>
     </Compile>
@@ -180,6 +186,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="StatusLeds" />
     <Folder Include="Tlc5941\" />
   </ItemGroup>
   <ItemGroup>

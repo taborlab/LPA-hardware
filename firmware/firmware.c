@@ -10,6 +10,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include "StatusLeds/StatusLeds.h"
 #include "Tlc5941/Tlc5941.h"
 
 // Initialize variables for demo
@@ -65,6 +66,14 @@ int main(void) {
 	
 	// Initialize pins for TLC
 	Tlc5941_Init();
+	
+	// Initialize Status LEDs
+	StatusLeds_Init();
+	
+	// Turn on status LEDs
+	StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
+	//StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+	//StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
     
     // Initialize Timer 5 to generate an interruption every millisecond
 	// Mode: CTC, WGM5 = 0b0100
