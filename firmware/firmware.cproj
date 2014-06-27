@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectVersion>6.1</ProjectVersion>
+    <ProjectVersion>6.2</ProjectVersion>
     <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
     <ProjectGuid>{a620d577-c379-432e-b2fc-92f1b427ba4c}</ProjectGuid>
     <avrdevice>ATmega328</avrdevice>
@@ -24,7 +24,7 @@
     <UncachedRange />
     <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
-    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <eraseonlaunchrule>1</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data>
         <options>
@@ -60,6 +60,19 @@
         <board id="board.stk600-mega.atmega328" value="Add" config="" content-id="Atmel.ASF" />
       </framework-data>
     </AsfFrameworkConfig>
+    <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
+    <com_atmel_avrdbg_tool_avrdragon>
+      <ToolOptions>
+        <InterfaceProperties>
+          <JtagEnableExtResetOnStartSession>false</JtagEnableExtResetOnStartSession>
+        </InterfaceProperties>
+        <InterfaceName>debugWIRE</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.avrdragon</ToolType>
+      <ToolNumber>00A20003611C</ToolNumber>
+      <ToolName>AVR Dragon</ToolName>
+    </com_atmel_avrdbg_tool_avrdragon>
+    <avrtoolinterface>debugWIRE</avrtoolinterface>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -172,6 +185,18 @@
     <Compile Include="firmware.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="SdDriver\SdDriver.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SdDriver\SdDriver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Spi\Spi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Spi\Spi.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="StatusLeds\StatusLeds.c">
       <SubType>compile</SubType>
     </Compile>
@@ -186,6 +211,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="SdDriver" />
+    <Folder Include="Spi" />
     <Folder Include="StatusLeds" />
     <Folder Include="Tlc5941\" />
   </ItemGroup>

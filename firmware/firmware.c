@@ -12,6 +12,12 @@
 
 #include "StatusLeds/StatusLeds.h"
 #include "Tlc5941/Tlc5941.h"
+#include "Spi/Spi.h"
+#include "SdDriver/SdDriver.h"
+
+//uint8_t inputBuffer[SdDriver_BLOCKSIZE];
+//uint8_t outputBuffer[SdDriver_BLOCKSIZE];
+uint8_t buffer[3*SdDriver_BLOCKSIZE];
 
 // Initialize variables for demo
 uint16_t wave[10][10] =
@@ -28,8 +34,10 @@ uint16_t wave[10][10] =
 uint8_t shift = 0;
 uint8_t wave_index=0;
 
+
 ISR(TIMER1_COMPA_vect) {
 	static uint16_t count = 0; // milliseconds
+	static uint16_t count2 = 0; // milliseconds
 	
 	Tlc5941_channel_t i = 0; // Tlc channel
 	
@@ -38,6 +46,7 @@ ISR(TIMER1_COMPA_vect) {
 		// Wait until we can modify gsData
 		while(Tlc5941_gsUpdateFlag);
 		
+		/*// "Snake" test
 		// Set all grayscale values to zero
 		Tlc5941_SetAllGS(0);
 		// Update appropriate grayscale values
@@ -51,18 +60,38 @@ ISR(TIMER1_COMPA_vect) {
 		{
 			wave_index = 0;
 			shift = (shift + 1) % Tlc5941_numChannels;
-		}
+		}*/
+		
+		// Ramp test
+		Tlc5941_SetAllGS(((uint16_t)wave_index)*16);
+		wave_index = (wave_index + 1) % 255;
+		
+		// Fixed tests
+		//Tlc5941_SetAllGS(0b101010101010);
+		//Tlc5941_SetAllGS(4095);
+		//Tlc5941_SetAllGS(2048);
+		
 		// Set update flag
 		Tlc5941_SetGSUpdateFlag();
 	}
 	
+	if (count2 == 0)
+	{
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
+	}
+	else if (count2 == 500)
+	{
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+	}
+	
 	// Increment counter
-	count ++;
-	if (count == 10)
-		count = 0;
+	count = (count + 1) % 10;
+	count2 = (count2 + 1) % 1000;
 }
 
 int main(void) {
+	
+	uint8_t temp;
 	
 	// Initialize pins for TLC
 	Tlc5941_Init();
@@ -70,10 +99,31 @@ int main(void) {
 	// Initialize Status LEDs
 	StatusLeds_Init();
 	
-	// Turn on status LEDs
-	StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
-	//StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
-	//StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
+	// Initialize SD card controller
+	if (SdDriver_Initialize())
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+	else
+	{
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_Off);
+		// Test reading a block
+		//SdDriver_ReadSingleBlock(640, inputBuffer);
+		//SdDriver_ReadSingleBlock(641, outputBuffer);
+		
+		// Test reading multiple blocks
+		//SdDriver_ReadMultipleBlock(640, 3, buffer);
+		
+		// Test reading and writing a block
+		//SdDriver_ReadSingleBlock(640, inputBuffer);
+		//inputBuffer[0] = 'H';
+		//SdDriver_WriteSingleBlock(640, inputBuffer);
+		
+		// Test reading and writing multiple blocks
+		SdDriver_ReadMultipleBlock(639, 2, buffer);
+		buffer[512] = 'H';
+		buffer[513] = 'e';
+		buffer[514] = 'l';
+		SdDriver_WriteMultipleBlock(639, 2, buffer);
+	}
     
     // Initialize Timer 5 to generate an interruption every millisecond
 	// Mode: CTC, WGM5 = 0b0100
@@ -86,7 +136,7 @@ int main(void) {
 	TIMSK1 = (1 << OCIE1A);
 	
 	// The following two lines are optional
-	Tlc5941_SetAllDC(63);
+	Tlc5941_SetAllDC(16);
 	Tlc5941_ClockInDC();
 	
 	// Default all channels to off
