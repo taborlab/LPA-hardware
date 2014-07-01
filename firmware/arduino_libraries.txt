@@ -1,0 +1,1 @@
+To include arduino libraries, follow procedure here: http://www.engblaze.com/tutorial-using-atmel-studio-6-with-arduino-projects/

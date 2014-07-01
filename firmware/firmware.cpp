@@ -1,5 +1,5 @@
 /*
- * firmware.c
+ * firmware.cpp
  *
  * Created: 28/02/2014 02:01:59 PM
  *  Author: Sebastian Castillo
@@ -10,14 +10,17 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include "StatusLeds/StatusLeds.h"
-#include "Tlc5941/Tlc5941.h"
-#include "Spi/Spi.h"
-#include "SdDriver/SdDriver.h"
+#include "Arduino.h"
+#include <SD.h>
 
-//uint8_t inputBuffer[SdDriver_BLOCKSIZE];
-//uint8_t outputBuffer[SdDriver_BLOCKSIZE];
-uint8_t buffer[3*SdDriver_BLOCKSIZE];
+extern "C"
+{
+	#include "StatusLeds/StatusLeds.h"
+	#include "Tlc5941/Tlc5941.h"
+};
+
+File file;
+uint8_t fileContents[100];
 
 // Initialize variables for demo
 uint16_t wave[10][10] =
@@ -92,6 +95,7 @@ ISR(TIMER1_COMPA_vect) {
 int main(void) {
 	
 	uint8_t temp;
+	uint8_t i=0;
 	
 	// Initialize pins for TLC
 	Tlc5941_Init();
@@ -99,34 +103,47 @@ int main(void) {
 	// Initialize Status LEDs
 	StatusLeds_Init();
 	
-	// Initialize SD card controller
-	if (SdDriver_Initialize())
+	// Initialize SD card
+	if (!SD.begin())
+	{
 		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+	}
 	else
 	{
-		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_Off);
-		// Test reading a block
-		//SdDriver_ReadSingleBlock(640, inputBuffer);
-		//SdDriver_ReadSingleBlock(641, outputBuffer);
-		
-		// Test reading multiple blocks
-		//SdDriver_ReadMultipleBlock(640, 3, buffer);
-		
-		// Test reading and writing a block
-		//SdDriver_ReadSingleBlock(640, inputBuffer);
-		//inputBuffer[0] = 'H';
-		//SdDriver_WriteSingleBlock(640, inputBuffer);
-		
-		// Test reading and writing multiple blocks
-		SdDriver_ReadMultipleBlock(639, 2, buffer);
-		buffer[512] = 'H';
-		buffer[513] = 'e';
-		buffer[514] = 'l';
-		SdDriver_WriteMultipleBlock(639, 2, buffer);
+		file = SD.open("example.txt", FILE_READ);
+		if (file) {
+			while (file.available()) {
+				fileContents[i] = file.read();
+				i++;
+			}
+			file.close();
+			// File contents verification
+			if (fileContents[0] != 'H' || 
+				fileContents[1] != 'e' || 
+				fileContents[2] != 'l' || 
+				fileContents[3] != 'l' || 
+				fileContents[4] != 'o' || 
+				fileContents[5] != ' ' || 
+				fileContents[6] != 'w' || 
+				fileContents[7] != 'o' || 
+				fileContents[8] != 'r' || 
+				fileContents[9] != 'l' || 
+				fileContents[10] != 'd' || 
+				fileContents[11] != '!')
+			{
+				StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+				StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
+			}
+		}
+		else
+		{
+			StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
+		}
 	}
+	
     
-    // Initialize Timer 5 to generate an interruption every millisecond
-	// Mode: CTC, WGM5 = 0b0100
+    // Initialize Timer 1 to generate an interruption every millisecond
+	// Mode: CTC, WGM1 = 0b0100
 	TCCR1B = (1 << WGM12);
 	// Clock: no prescaling
 	TCCR1B |= (1 << CS10);

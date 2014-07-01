@@ -3,12 +3,12 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.2</ProjectVersion>
-    <ToolchainName>com.Atmel.AVRGCC8.C</ToolchainName>
+    <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
     <ProjectGuid>{a620d577-c379-432e-b2fc-92f1b427ba4c}</ProjectGuid>
     <avrdevice>ATmega328</avrdevice>
     <avrdeviceseries>mega</avrdeviceseries>
     <OutputType>Executable</OutputType>
-    <Language>C</Language>
+    <Language>CPP</Language>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
@@ -128,73 +128,90 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
-      <AvrGcc>
-        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-        <avrgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </avrgcc.compiler.symbols.DefSymbols>
-        <avrgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>../common/applications/user_application/atmega328_stk600-mega/config</Value>
-            <Value>../src/config</Value>
-            <Value>../src/ASF/common/boards</Value>
-            <Value>../src/ASF/mega/utils</Value>
-            <Value>../src/ASF/common/utils</Value>
-            <Value>../src/ASF/mega/utils/preprocessor</Value>
-            <Value>../src</Value>
-          </ListValues>
-        </avrgcc.compiler.directories.IncludePaths>
-        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
-        <avrgcc.compiler.optimization.OtherFlags>-fdata-sections</avrgcc.compiler.optimization.OtherFlags>
-        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
-        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-        <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -include ../config.h</avrgcc.compiler.miscellaneous.OtherFlags>
-        <avrgcc.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libm</Value>
-          </ListValues>
-        </avrgcc.linker.libraries.Libraries>
-        <avrgcc.linker.miscellaneous.LinkerFlags>-Wl,--relax</avrgcc.linker.miscellaneous.LinkerFlags>
-        <avrgcc.assembler.general.AssemblerFlags>-mrelax -DBOARD=STK600_MEGA</avrgcc.assembler.general.AssemblerFlags>
-        <avrgcc.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>../common/applications/user_application/atmega328_stk600-mega/config</Value>
-            <Value>../src/config</Value>
-            <Value>../src/ASF/common/boards</Value>
-            <Value>../src/ASF/mega/utils</Value>
-            <Value>../src/ASF/common/utils</Value>
-            <Value>../src/ASF/mega/utils/preprocessor</Value>
-            <Value>../src</Value>
-          </ListValues>
-        </avrgcc.assembler.general.IncludePaths>
-        <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
-      </AvrGcc>
+      <AvrGccCpp>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>../common/applications/user_application/atmega328_stk600-mega/config</Value>
+      <Value>../src/config</Value>
+      <Value>../src/ASF/common/boards</Value>
+      <Value>../src/ASF/mega/utils</Value>
+      <Value>../src/ASF/common/utils</Value>
+      <Value>../src/ASF/mega/utils/preprocessor</Value>
+      <Value>../src</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.OtherFlags>-fdata-sections</avrgcc.compiler.optimization.OtherFlags>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -include ../config.h</avrgcc.compiler.miscellaneous.OtherFlags>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>ARDUINO=105</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:\Program Files (x86)\Arduino\hardware\arduino\cores\arduino</Value>
+      <Value>C:\Program Files (x86)\Arduino\hardware\arduino\variants\standard</Value>
+      <Value>C:\Program Files (x86)\Arduino\libraries\SD</Value>
+      <Value>C:\Program Files (x86)\Arduino\libraries\SD\utility</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize for size (-Os)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.OtherFlags>-fdata-sections</avrgcccpp.compiler.optimization.OtherFlags>
+  <avrgcccpp.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.miscellaneous.OtherFlags>-include ../config.h -fno-exceptions</avrgcccpp.compiler.miscellaneous.OtherFlags>
+  <avrgcccpp.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+      <Value>libcore</Value>
+    </ListValues>
+  </avrgcccpp.linker.libraries.Libraries>
+  <avrgcccpp.linker.libraries.LibrarySearchPaths>
+    <ListValues>
+      <Value>D:\Documents\Atmel Studio\arduinoCore328</Value>
+    </ListValues>
+  </avrgcccpp.linker.libraries.LibrarySearchPaths>
+</AvrGccCpp>
     </ToolchainSettings>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="firmware.c">
+    <Compile Include="C:\Program Files %28x86%29\Arduino\libraries\SD\File.cpp">
       <SubType>compile</SubType>
+      <Link>arduino_libraries\File.cpp</Link>
     </Compile>
-    <Compile Include="SdDriver\SdDriver.c">
+    <Compile Include="C:\Program Files %28x86%29\Arduino\libraries\SD\SD.cpp">
       <SubType>compile</SubType>
+      <Link>arduino_libraries\SD.cpp</Link>
     </Compile>
-    <Compile Include="SdDriver\SdDriver.h">
+    <Compile Include="C:\Program Files %28x86%29\Arduino\libraries\SD\utility\Sd2Card.cpp">
       <SubType>compile</SubType>
+      <Link>arduino_libraries\Sd2Card.cpp</Link>
     </Compile>
-    <Compile Include="Spi\Spi.c">
+    <Compile Include="C:\Program Files %28x86%29\Arduino\libraries\SD\utility\SdFile.cpp">
       <SubType>compile</SubType>
+      <Link>arduino_libraries\SdFile.cpp</Link>
     </Compile>
-    <Compile Include="Spi\Spi.h">
+    <Compile Include="C:\Program Files %28x86%29\Arduino\libraries\SD\utility\SdVolume.cpp">
+      <SubType>compile</SubType>
+      <Link>arduino_libraries\SdVolume.cpp</Link>
+    </Compile>
+    <Compile Include="firmware.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="StatusLeds\StatusLeds.c">
@@ -211,8 +228,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SdDriver" />
-    <Folder Include="Spi" />
+    <Folder Include="arduino_libraries" />
     <Folder Include="StatusLeds" />
     <Folder Include="Tlc5941\" />
   </ItemGroup>

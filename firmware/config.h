@@ -35,6 +35,6 @@
 
 #define Tlc5941_USART_SPI 1
 
-#define Tlc5941_N 3
+#define Tlc5941_N 12
 
 #define Tlc5941_MANUAL_DC_FUNCS 1
