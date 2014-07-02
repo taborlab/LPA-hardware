@@ -33,6 +33,8 @@
 #define Tlc5941_SCLK_PORT PORTD
 #define Tlc5941_SCLK_PIN PD4
 
+#define Tlc5941_TIMER 2
+
 #define Tlc5941_USART_SPI 1
 
 #define Tlc5941_N 3

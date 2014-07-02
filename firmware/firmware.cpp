@@ -8,6 +8,7 @@
 // Headers
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <util/atomic.h>
 
 #include "Arduino.h"
 #include <SD.h>
@@ -26,7 +27,7 @@
 #define System_stateErrorTimeout 6
 #define System_stateErrorLpfUnavailable 7
 
-uint8_t System_state;
+volatile uint8_t System_state;
 
 #define System_SetState(state) System_state = state;
 #define System_IsState(state) System_state == state
@@ -35,20 +36,24 @@ uint8_t System_state;
 // Light program file
 File lpf;
 
+// Synchronization variable
+volatile int8_t dataAvailableFlag = 0;
+#define Flag_Set(f) f++
+#define Flag_Release(f) f--
+#define Flag_Wait(f) while(f)
+#define Flag_IsSet(f) (f>0)
+#define Flag_HasFailedRelease(f) (f<0)
+
 void UpdateLeds(void) {
-	// counter for led update
-	static uint8_t ledCounter = 0;
+	// Release data available flag
+	if (System_IsState(System_stateRunning))
+	{
+		Flag_Release(dataAvailableFlag);
+	}
 
-	// Wait until we can modify gsData
-	while(Tlc5941_gsUpdateFlag);
-
-	// Set all LEDs to a constant value
-	Tlc5941_SetAllGS(0);
-	Tlc5941_SetGS(ledCounter, 4095);
-	ledCounter = (ledCounter + 1) % (Tlc5941_N*16);
-	
-	// Set update flag
-	Tlc5941_SetGSUpdateFlag();
+	// Set update flag for Tlc library
+	if (!Flag_HasFailedRelease(dataAvailableFlag))
+		Tlc5941_SetGSUpdateFlag();
 }
 
 void UpdateStatusLeds(void) {
@@ -97,7 +102,37 @@ void UpdateStatusLeds(void) {
 	}
 }
 
+// This function is required for proper operation of the arduino libraries.
+// It uses the same settings for timer 0 as init() in wiring.c
+void timer0_init()
+{
+	#ifndef cbi
+	#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+	#endif
+	#ifndef sbi
+	#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+	#endif
+	
+	// on the ATmega168, timer 0 is also used for fast hardware pwm
+	// (using phase-correct PWM would mean that timer 0 overflowed half as often
+	// resulting in different millis() behavior on the ATmega8 and ATmega168)
+	sbi(TCCR0A, WGM01);
+	sbi(TCCR0A, WGM00);
+
+	// set timer 0 prescale factor to 64
+	sbi(TCCR0B, CS01);
+	sbi(TCCR0B, CS00);
+
+	// enable timer 0 overflow interrupt
+	sbi(TIMSK0, TOIE0);
+}
+
 int main(void) {
+	// counter for led update
+	uint8_t ledCounter = 0;
+
+	// Enable interruptions
+	sei();
 	
 	// Initialize TLC module
 	Tlc5941_Init();
@@ -106,6 +141,12 @@ int main(void) {
 	Tlc5941_ClockInDC();
 	// Default all grayscale values to off
 	Tlc5941_SetAllGS(0);
+	// Force upload of grayscale values
+	Tlc5941_SetGSUpdateFlag();
+	while(Tlc5941_gsUpdateFlag);
+
+	// Signal that the first set of grayscale values should be used during the first iteration
+	Flag_Set(dataAvailableFlag);
 	
 	// Initialize Status LEDs
 	StatusLeds_Init();
@@ -116,6 +157,8 @@ int main(void) {
 	MsTimer_AddCallback(&UpdateLeds, 10);
 	MsTimer_AddCallback(&UpdateStatusLeds, 500);
 
+	// Initialize timer 0 before using the SD card library
+	timer0_init();
 	// Initialize system state
 	System_SetState(System_stateInitializing);
 	
@@ -145,15 +188,43 @@ int main(void) {
 	
 	// Start timer
 	MsTimer_Start();
-	
-	// Enable Global Interrupts
-	sei();
 
 	// Do led intensity decoding as necessary
 	while(1) {
 		if (System_IsState(System_stateRunning))
 		{
+			// Wait until data has been consumed
+			while(Flag_IsSet(dataAvailableFlag));
+
+			// Wait until TLC library is done transmitting
+			while(Tlc5941_gsUpdateFlag);
+
+			// Read data from LPF
 			// TODO
+
+			// Temporary data generation
+			// Set all LEDs to a constant value
+			for (uint8_t i = 0; i < Tlc5941_N*16; i++)
+			{
+				if (i == ledCounter)
+					Tlc5941_SetGS(i, 4095);
+				else
+					Tlc5941_SetGS(i, 0);
+			}
+			ledCounter = (ledCounter + 1) % (Tlc5941_N*16);
+
+			// Check if last data access was met
+			// This should be run as an atomic block
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				if (Flag_HasFailedRelease(dataAvailableFlag))
+				{
+					System_SetState(System_stateErrorTimeout);
+				}
+				else
+				{
+					Flag_Set(dataAvailableFlag);
+				}
+			}
 		}
 	}
 	return 0;

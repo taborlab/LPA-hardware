@@ -25,5 +25,5 @@ void StatusLeds_Set(uint8_t led, uint8_t status)
 
 void StatusLeds_Toggle(uint8_t led)
 {
-	PINC |= 1 << led;
+	PINC = (1 << led);
 }
