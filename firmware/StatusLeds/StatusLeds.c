@@ -22,3 +22,8 @@ void StatusLeds_Set(uint8_t led, uint8_t status)
 	else
 	PORTC &= ~( 1 << led);
 }
+
+void StatusLeds_Toggle(uint8_t led)
+{
+	PINC |= 1 << led;
+}

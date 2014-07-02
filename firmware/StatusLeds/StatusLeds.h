@@ -5,6 +5,9 @@
  *  Author: Sebastian Castillo
  */ 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef STATUSLEDS_H_
 #define STATUSLEDS_H_
@@ -21,5 +24,10 @@
 // Functions
 void StatusLeds_Init(void);
 void StatusLeds_Set(uint8_t led, uint8_t status);
+void StatusLeds_Toggle(uint8_t led);
 
 #endif /* STATUSLEDS_H_ */
+
+#ifdef __cplusplus
+}
+#endif
