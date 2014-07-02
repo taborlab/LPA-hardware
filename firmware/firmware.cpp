@@ -16,13 +16,29 @@
 #include "Tlc5941/Tlc5941.h"
 #include "MsTimer/MsTimer.h"
 
-// File variable
-File file;
+// System states
+#define System_stateInitializing 0
+#define System_stateRunning 1
+#define System_stateFinished 2
+#define System_stateErrorNoSdCard 3
+#define System_stateErrorNoLpf 4
+#define System_stateErrorWrongLpf 5
+#define System_stateErrorTimeout 6
+#define System_stateErrorLpfUnavailable 7
 
-// counter for led update
-uint8_t ledCounter = 0;
+uint8_t System_state;
+
+#define System_SetState(state) System_state = state;
+#define System_IsState(state) System_state == state
+#define System_IsNotState(state) System_state != state
+
+// Light program file
+File lpf;
 
 void UpdateLeds(void) {
+	// counter for led update
+	static uint8_t ledCounter = 0;
+
 	// Wait until we can modify gsData
 	while(Tlc5941_gsUpdateFlag);
 
@@ -36,14 +52,52 @@ void UpdateLeds(void) {
 }
 
 void UpdateStatusLeds(void) {
-	StatusLeds_Toggle(StatusLeds_LedOn);
+	switch (System_state)
+	{
+	case System_stateInitializing:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	case System_stateRunning:
+		StatusLeds_Toggle(StatusLeds_LedOn);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	case System_stateFinished:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
+		break;
+	case System_stateErrorNoSdCard:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	case System_stateErrorNoLpf:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
+		break;
+	case System_stateErrorWrongLpf:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
+		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	case System_stateErrorTimeout:
+		StatusLeds_Toggle(StatusLeds_LedOn);
+		StatusLeds_Toggle(StatusLeds_LedErr);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	case System_stateErrorLpfUnavailable:
+		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
+		StatusLeds_Toggle(StatusLeds_LedErr);
+		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
+		break;
+	}
 }
 
 int main(void) {
-	
-	uint8_t temp;
-	uint8_t i=0;
-	uint8_t fileContents[100];
 	
 	// Initialize TLC module
 	Tlc5941_Init();
@@ -61,43 +115,32 @@ int main(void) {
 	// Assign callbacks
 	MsTimer_AddCallback(&UpdateLeds, 10);
 	MsTimer_AddCallback(&UpdateStatusLeds, 500);
+
+	// Initialize system state
+	System_SetState(System_stateInitializing);
 	
-	// Initialize SD card
+	// Test if SD card is present and initialize
 	if (!SD.begin())
 	{
-		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+		System_SetState(System_stateErrorNoSdCard);
 	}
-	else
+	// Test if SD card is present
+	if (System_IsState(System_stateInitializing))
 	{
-		file = SD.open("example.txt", FILE_READ);
-		if (file) {
-			while (file.available()) {
-				fileContents[i] = file.read();
-				i++;
+		lpf = SD.open("program.lpf", FILE_READ);
+		if (!lpf) {
+				System_SetState(System_stateErrorNoLpf);
 			}
-			file.close();
-			// File contents verification
-			if (fileContents[0] != 'H' ||
-			fileContents[1] != 'e' ||
-			fileContents[2] != 'l' ||
-			fileContents[3] != 'l' ||
-			fileContents[4] != 'o' ||
-			fileContents[5] != ' ' ||
-			fileContents[6] != 'w' ||
-			fileContents[7] != 'o' ||
-			fileContents[8] != 'r' ||
-			fileContents[9] != 'l' ||
-			fileContents[10] != 'd' ||
-			fileContents[11] != '!')
-			{
-				StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
-				StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
-			}
-		}
-		else
-		{
-			StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
-		}
+	}
+
+	// Get headers from LPF
+	// TODO
+	// Verify headers from LPF
+	// TODO
+	// Switch to running state
+	if (System_IsState(System_stateInitializing))
+	{
+		System_SetState(System_stateRunning);
 	}
 	
 	// Start timer
@@ -106,7 +149,12 @@ int main(void) {
 	// Enable Global Interrupts
 	sei();
 
+	// Do led intensity decoding as necessary
 	while(1) {
+		if (System_IsState(System_stateRunning))
+		{
+			// TODO
+		}
 	}
 	return 0;
 }
