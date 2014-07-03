@@ -33,9 +33,6 @@ volatile uint8_t System_state;
 #define System_IsState(state) System_state == state
 #define System_IsNotState(state) System_state != state
 
-// Light program file
-File lpf;
-
 // Synchronization variable
 volatile int8_t dataAvailableFlag = 0;
 #define Flag_Set(f) f++
@@ -44,6 +41,18 @@ volatile int8_t dataAvailableFlag = 0;
 #define Flag_IsSet(f) (f>0)
 #define Flag_HasFailedRelease(f) (f<0)
 
+typedef struct
+{
+	uint32_t fileVersion;
+	uint32_t numberChannels;
+	uint32_t stepSize;
+	uint32_t numberSteps;
+	uint32_t counterStep;
+} lpfInfo_t;
+
+#define LPF_HEADER_LENGTH 32
+
+// Periodic functions
 void UpdateLeds(void) {
 	// Release data available flag
 	if (System_IsState(System_stateRunning))
@@ -113,9 +122,7 @@ void timer0_init()
 	#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 	#endif
 	
-	// on the ATmega168, timer 0 is also used for fast hardware pwm
-	// (using phase-correct PWM would mean that timer 0 overflowed half as often
-	// resulting in different millis() behavior on the ATmega8 and ATmega168)
+	// Timer mode: fast PWM
 	sbi(TCCR0A, WGM01);
 	sbi(TCCR0A, WGM00);
 
@@ -128,8 +135,12 @@ void timer0_init()
 }
 
 int main(void) {
-	// counter for led update
-	uint8_t ledCounter = 0;
+	// Light program file
+	File lpfFile;
+	// Information holder for the lpf
+	lpfInfo_t lpfInfo;
+	
+	uint32_t temp = 0;
 
 	// Enable interruptions
 	sei();
@@ -153,9 +164,6 @@ int main(void) {
 	
 	// Initialize ms timer
 	MsTimer_Init();
-	// Assign callbacks
-	MsTimer_AddCallback(&UpdateLeds, 10);
-	MsTimer_AddCallback(&UpdateStatusLeds, 500);
 
 	// Initialize timer 0 before using the SD card library
 	timer0_init();
@@ -170,26 +178,54 @@ int main(void) {
 	// Test if SD card is present
 	if (System_IsState(System_stateInitializing))
 	{
-		lpf = SD.open("program.lpf", FILE_READ);
-		if (!lpf) {
+		lpfFile = SD.open("program.lpf", FILE_READ);
+		if (!lpfFile) {
 				System_SetState(System_stateErrorNoLpf);
 			}
 	}
 
 	// Get headers from LPF
-	// TODO
+	if (System_IsState(System_stateInitializing))
+	{
+		if (lpfFile.size() < LPF_HEADER_LENGTH)
+		{
+			System_SetState(System_stateErrorWrongLpf);
+		}
+		else
+		{
+			lpfFile.readBytes((char*)(&(lpfInfo.fileVersion)), 4);
+			lpfFile.readBytes((char*)(&(lpfInfo.numberChannels)), 4);
+			lpfFile.readBytes((char*)(&(lpfInfo.stepSize)), 4);
+			lpfFile.readBytes((char*)(&(lpfInfo.numberSteps)), 4);
+			lpfInfo.counterStep = 0;
+		}
+	}
 	// Verify headers from LPF
-	// TODO
+	if (System_IsState(System_stateInitializing))
+	{
+		// Check appropriate number of channels
+		if (lpfInfo.numberChannels != Tlc5941_numChannels)
+			System_SetState(System_stateErrorWrongLpf);
+	
+		// Check appropriate file size
+		if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*3/2))
+			System_SetState(System_stateErrorWrongLpf);
+	}
 	// Switch to running state
 	if (System_IsState(System_stateInitializing))
 	{
 		System_SetState(System_stateRunning);
 	}
 	
+	// Assign callbacks to timer
+	if (System_IsState(System_stateInitializing))
+		MsTimer_AddCallback(&UpdateLeds, lpfInfo.stepSize);
+	MsTimer_AddCallback(&UpdateStatusLeds, 500);
 	// Start timer
 	MsTimer_Start();
 
 	// Do led intensity decoding as necessary
+	lpfFile.seek(LPF_HEADER_LENGTH);
 	while(1) {
 		if (System_IsState(System_stateRunning))
 		{
@@ -199,19 +235,34 @@ int main(void) {
 			// Wait until TLC library is done transmitting
 			while(Tlc5941_gsUpdateFlag);
 
-			// Read data from LPF
-			// TODO
-
-			// Temporary data generation
-			// Set all LEDs to a constant value
-			for (uint8_t i = 0; i < Tlc5941_N*16; i++)
+			// Check if finished
+			if (lpfInfo.counterStep == lpfInfo.numberSteps)
 			{
-				if (i == ledCounter)
-					Tlc5941_SetGS(i, 4095);
-				else
-					Tlc5941_SetGS(i, 0);
+				System_SetState(System_stateFinished);
+				continue;
 			}
-			ledCounter = (ledCounter + 1) % (Tlc5941_N*16);
+			// Read data from LPF
+			for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels/2; i++)
+			{
+				// We get three bytes at a time, which contains two grayscale values
+				if (lpfFile.readBytes((char*)(&(temp)), 3) != 3)
+				{
+					System_SetState(System_stateErrorLpfUnavailable);
+					continue;
+				}
+				// Update LEDs
+				// No position decoding
+				Tlc5941_SetGS(i*2, (uint16_t)(temp & 0xFFF));
+				Tlc5941_SetGS(i*2 + 1, (uint16_t)((temp>>12) & 0xFFF));
+				// With position decoding
+				/*Tlc5941_SetGS(well2channel[i*2], (uint16_t)(temp & 0xFFF));
+				Tlc5941_SetGS(well2channel[i*2 + 1], (uint16_t)((temp>>12) & 0xFFF));*/
+				/*// With position decoding and calibration scaling
+				Tlc5941_SetGS(well2channel[i*2], ((uint16_t)(temp & 0xFFF)*grayscaleCalibration[i*2])/255);
+				Tlc5941_SetGS(well2channel[i*2 + 1], ((uint16_t)((temp>>12) & 0xFFF)*grayscaleCalibration[i*2 + 1])/255);*/
+			}
+			// Increment time counter
+			lpfInfo.counterStep++;
 
 			// Check if last data access was met
 			// This should be run as an atomic block
