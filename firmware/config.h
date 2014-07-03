@@ -42,7 +42,8 @@
 #define Tlc5941_MANUAL_DC_FUNCS 1
 
 #include <avr/io.h>
-static const uint8_t well2channel[Tlc5941_N*16] = {
+#include "Tlc5941/Tlc5941.h"
+static const Tlc5941_gsData_t well2channel[Tlc5941_numChannels] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
 	12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
 	24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
@@ -60,7 +61,7 @@ static const uint8_t well2channel[Tlc5941_N*16] = {
 	168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
 	180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191};
 
-static const uint8_t grayscaleCalibration[Tlc5941_N*16] = {
+static const Tlc5941_gsData_t grayscaleCalibration[Tlc5941_numChannels] = {
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
