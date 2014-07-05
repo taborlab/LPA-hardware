@@ -17,6 +17,10 @@
 #include "Tlc5941/Tlc5941.h"
 #include "MsTimer/MsTimer.h"
 
+#define OPERATION_MODE_CALIBRATION 1
+#define OPERATION_MODE_NORMAL 2
+#define OPERATION_MODE OPERATION_MODE_CALIBRATION
+
 // System states
 #define System_stateInitializing 0
 #define System_stateRunning 1
@@ -54,15 +58,23 @@ typedef struct
 
 // Periodic functions
 void UpdateLeds(void) {
-	// Release data available flag
-	if (System_IsState(System_stateRunning))
-	{
-		Flag_Release(dataAvailableFlag);
-	}
-
-	// Set update flag for Tlc library
-	if (!Flag_HasFailedRelease(dataAvailableFlag))
+	#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+		while(Tlc5941_gsUpdateFlag);
+		for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
+			if (i%2 == 0)
+				Tlc5941_SetGS(i, 100);
 		Tlc5941_SetGSUpdateFlag();
+	#elif (OPERATION_MODE == OPERATION_MODE_NORMAL)
+		// Release data available flag
+		if (System_IsState(System_stateRunning))
+		{
+			Flag_Release(dataAvailableFlag);
+		}
+
+		// Set update flag for Tlc library
+		if (!Flag_HasFailedRelease(dataAvailableFlag))
+			Tlc5941_SetGSUpdateFlag();
+	#endif
 }
 
 void UpdateStatusLeds(void) {
@@ -135,148 +147,180 @@ void timer0_init()
 }
 
 int main(void) {
-	// Light program file
-	File lpfFile;
-	// Information holder for the lpf
-	lpfInfo_t lpfInfo;
+	#if (OPERATION_MODE == OPERATION_MODE_NORMAL)
+		// Light program file
+		File lpfFile;
+		// Information holder for the lpf
+		lpfInfo_t lpfInfo;
 	
-	uint32_t temp = 0;
+		uint32_t temp = 0;
 
-	// Enable interruptions
-	sei();
+		// Enable interruptions
+		sei();
 	
-	// Initialize TLC module
-	Tlc5941_Init();
-	// Set up grayscale value
-	Tlc5941_SetAllDC(8);
-	Tlc5941_ClockInDC();
-	// Default all grayscale values to off
-	Tlc5941_SetAllGS(0);
-	// Force upload of grayscale values
-	Tlc5941_SetGSUpdateFlag();
-	while(Tlc5941_gsUpdateFlag);
+		// Initialize TLC module
+		Tlc5941_Init();
+		// Set up grayscale value
+		Tlc5941_SetAllDC(8);
+		Tlc5941_ClockInDC();
+		// Default all grayscale values to off
+		Tlc5941_SetAllGS(0);
+		// Force upload of grayscale values
+		Tlc5941_SetGSUpdateFlag();
+		while(Tlc5941_gsUpdateFlag);
 
-	// Signal that the first set of grayscale values should be used during the first iteration
-	Flag_Set(dataAvailableFlag);
+		// Signal that the first set of grayscale values should be used during the first iteration
+		Flag_Set(dataAvailableFlag);
 	
-	// Initialize Status LEDs
-	StatusLeds_Init();
+		// Initialize Status LEDs
+		StatusLeds_Init();
 	
-	// Initialize ms timer
-	MsTimer_Init();
+		// Initialize ms timer
+		MsTimer_Init();
 
-	// Initialize timer 0 before using the SD card library
-	timer0_init();
-	// Initialize system state
-	System_SetState(System_stateInitializing);
+		// Initialize timer 0 before using the SD card library
+		timer0_init();
+		// Initialize system state
+		System_SetState(System_stateInitializing);
 	
-	// Test if SD card is present and initialize
-	if (!SD.begin())
-	{
-		System_SetState(System_stateErrorNoSdCard);
-	}
-	// Test if SD card is present
-	if (System_IsState(System_stateInitializing))
-	{
-		lpfFile = SD.open("program.lpf", FILE_READ);
-		if (!lpfFile) {
-				System_SetState(System_stateErrorNoLpf);
-			}
-	}
-
-	// Get headers from LPF
-	if (System_IsState(System_stateInitializing))
-	{
-		if (lpfFile.size() < LPF_HEADER_LENGTH)
+		// Test if SD card is present and initialize
+		if (!SD.begin())
 		{
-			System_SetState(System_stateErrorWrongLpf);
+			System_SetState(System_stateErrorNoSdCard);
 		}
-		else
+		// Test if SD card is present
+		if (System_IsState(System_stateInitializing))
 		{
-			lpfFile.readBytes((char*)(&(lpfInfo.fileVersion)), 4);
-			lpfFile.readBytes((char*)(&(lpfInfo.numberChannels)), 4);
-			lpfFile.readBytes((char*)(&(lpfInfo.stepSize)), 4);
-			lpfFile.readBytes((char*)(&(lpfInfo.numberSteps)), 4);
-			lpfInfo.counterStep = 0;
+			lpfFile = SD.open("program.lpf", FILE_READ);
+			if (!lpfFile) {
+					System_SetState(System_stateErrorNoLpf);
+				}
 		}
-	}
-	// Verify headers from LPF
-	if (System_IsState(System_stateInitializing))
-	{
-		// Check appropriate number of channels
-		if (lpfInfo.numberChannels != Tlc5941_numChannels)
-			System_SetState(System_stateErrorWrongLpf);
-	
-		// Check appropriate file size
-		if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*3/2))
-			System_SetState(System_stateErrorWrongLpf);
-	}
-	// Switch to running state
-	if (System_IsState(System_stateInitializing))
-	{
-		System_SetState(System_stateRunning);
-	}
-	
-	// Assign callbacks to timer
-	if (System_IsState(System_stateInitializing))
-		MsTimer_AddCallback(&UpdateLeds, lpfInfo.stepSize);
-	MsTimer_AddCallback(&UpdateStatusLeds, 500);
-	// Start timer
-	MsTimer_Start();
 
-	// Do led intensity decoding as necessary
-	lpfFile.seek(LPF_HEADER_LENGTH);
-	while(1) {
-		if (System_IsState(System_stateRunning))
+		// Get headers from LPF
+		if (System_IsState(System_stateInitializing))
 		{
-			// Wait until data has been consumed
-			while(Flag_IsSet(dataAvailableFlag));
-
-			// Wait until TLC library is done transmitting
-			while(Tlc5941_gsUpdateFlag);
-
-			// Check if finished
-			if (lpfInfo.counterStep == lpfInfo.numberSteps)
+			if (lpfFile.size() < LPF_HEADER_LENGTH)
 			{
-				System_SetState(System_stateFinished);
-				continue;
+				System_SetState(System_stateErrorWrongLpf);
 			}
-			// Read data from LPF
-			for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels/2; i++)
+			else
 			{
-				// We get three bytes at a time, which contains two grayscale values
-				if (lpfFile.readBytes((char*)(&(temp)), 3) != 3)
+				lpfFile.readBytes((char*)(&(lpfInfo.fileVersion)), 4);
+				lpfFile.readBytes((char*)(&(lpfInfo.numberChannels)), 4);
+				lpfFile.readBytes((char*)(&(lpfInfo.stepSize)), 4);
+				lpfFile.readBytes((char*)(&(lpfInfo.numberSteps)), 4);
+				lpfInfo.counterStep = 0;
+			}
+		}
+		// Verify headers from LPF
+		if (System_IsState(System_stateInitializing))
+		{
+			// Check appropriate number of channels
+			if (lpfInfo.numberChannels != Tlc5941_numChannels)
+				System_SetState(System_stateErrorWrongLpf);
+	
+			// Check appropriate file size
+			if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*3/2))
+				System_SetState(System_stateErrorWrongLpf);
+		}
+		// Switch to running state
+		if (System_IsState(System_stateInitializing))
+		{
+			System_SetState(System_stateRunning);
+		}
+	
+		// Assign callbacks to timer
+		if (System_IsState(System_stateInitializing))
+			MsTimer_AddCallback(&UpdateLeds, lpfInfo.stepSize);
+		MsTimer_AddCallback(&UpdateStatusLeds, 500);
+		// Start timer
+		MsTimer_Start();
+
+		// Do led intensity decoding as necessary
+		lpfFile.seek(LPF_HEADER_LENGTH);
+		while(1) {
+			if (System_IsState(System_stateRunning))
+			{
+				// Wait until data has been consumed
+				while(Flag_IsSet(dataAvailableFlag));
+
+				// Wait until TLC library is done transmitting
+				while(Tlc5941_gsUpdateFlag);
+
+				// Check if finished
+				if (lpfInfo.counterStep == lpfInfo.numberSteps)
 				{
-					System_SetState(System_stateErrorLpfUnavailable);
+					System_SetState(System_stateFinished);
 					continue;
 				}
-				// Update LEDs
-				// No position decoding
-				Tlc5941_SetGS(i*2, (uint16_t)(temp & 0xFFF));
-				Tlc5941_SetGS(i*2 + 1, (uint16_t)((temp>>12) & 0xFFF));
-				// With position decoding
-				/*Tlc5941_SetGS(well2channel[i*2], (uint16_t)(temp & 0xFFF));
-				Tlc5941_SetGS(well2channel[i*2 + 1], (uint16_t)((temp>>12) & 0xFFF));*/
-				/*// With position decoding and calibration scaling
-				Tlc5941_SetGS(well2channel[i*2], ((uint16_t)(temp & 0xFFF)*grayscaleCalibration[i*2])/255);
-				Tlc5941_SetGS(well2channel[i*2 + 1], ((uint16_t)((temp>>12) & 0xFFF)*grayscaleCalibration[i*2 + 1])/255);*/
-			}
-			// Increment time counter
-			lpfInfo.counterStep++;
-
-			// Check if last data access was met
-			// This should be run as an atomic block
-			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-				if (Flag_HasFailedRelease(dataAvailableFlag))
+				// Read data from LPF
+				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels/2; i++)
 				{
-					System_SetState(System_stateErrorTimeout);
+					// We get three bytes at a time, which contains two grayscale values
+					if (lpfFile.readBytes((char*)(&(temp)), 3) != 3)
+					{
+						System_SetState(System_stateErrorLpfUnavailable);
+						continue;
+					}
+					// Update LEDs
+					// No position decoding
+					Tlc5941_SetGS(i*2, (uint16_t)(temp & 0xFFF));
+					Tlc5941_SetGS(i*2 + 1, (uint16_t)((temp>>12) & 0xFFF));
+					// With position decoding
+					/*Tlc5941_SetGS(well2channel[i*2], (uint16_t)(temp & 0xFFF));
+					Tlc5941_SetGS(well2channel[i*2 + 1], (uint16_t)((temp>>12) & 0xFFF));*/
+					/*// With position decoding and calibration scaling
+					Tlc5941_SetGS(well2channel[i*2], ((uint16_t)(temp & 0xFFF)*grayscaleCalibration[i*2])/255);
+					Tlc5941_SetGS(well2channel[i*2 + 1], ((uint16_t)((temp>>12) & 0xFFF)*grayscaleCalibration[i*2 + 1])/255);*/
 				}
-				else
-				{
-					Flag_Set(dataAvailableFlag);
+				// Increment time counter
+				lpfInfo.counterStep++;
+
+				// Check if last data access was met
+				// This should be run as an atomic block
+				ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+					if (Flag_HasFailedRelease(dataAvailableFlag))
+					{
+						System_SetState(System_stateErrorTimeout);
+					}
+					else
+					{
+						Flag_Set(dataAvailableFlag);
+					}
 				}
 			}
 		}
-	}
-	return 0;
+		return 0;
+	#elif (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+		// Enable interruptions
+		sei();
+	
+		// Initialize TLC module
+		Tlc5941_Init();
+		// Set up grayscale value
+		Tlc5941_SetAllDC(8);
+		Tlc5941_ClockInDC();
+		// Default all grayscale values to off
+		Tlc5941_SetAllGS(0);
+		// Force upload of grayscale values
+		Tlc5941_SetGSUpdateFlag();
+		while(Tlc5941_gsUpdateFlag);
+	
+		// Initialize Status LEDs
+		StatusLeds_Init();
+	
+		// Initialize ms timer
+		MsTimer_Init();
+		// Add callbacks
+		MsTimer_AddCallback(&UpdateLeds, 100);
+		MsTimer_AddCallback(&UpdateStatusLeds, 500);
+		// Start timer
+		MsTimer_Start();
+	
+		while (1)
+		{
+		}
+		return 0;
+	#endif
 }
