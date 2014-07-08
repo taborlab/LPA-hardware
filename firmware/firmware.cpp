@@ -59,10 +59,23 @@ typedef struct
 // Periodic functions
 void UpdateLeds(void) {
 	#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+		static Tlc5941_gsData_t k = 0;
 		while(Tlc5941_gsUpdateFlag);
+		
+		// Calibration submode 1: all constant
 		for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
-			if (i%2 == 0)
-				Tlc5941_SetGS(i, 100);
+		{
+			if (i%2 == 1)
+			{
+				Tlc5941_SetGS(well2channel[i], (100UL*grayscaleCalibration[i])>>8);
+			}
+		}
+		
+		/*// Calibration submode 2: moving signal
+		Tlc5941_SetAllGS(0);
+		Tlc5941_SetGS(well2channel[k], 4095);
+		k = (k + 1) % Tlc5941_numChannels;*/
+		
 		Tlc5941_SetGSUpdateFlag();
 	#elif (OPERATION_MODE == OPERATION_MODE_NORMAL)
 		// Release data available flag
@@ -313,7 +326,7 @@ int main(void) {
 		// Initialize ms timer
 		MsTimer_Init();
 		// Add callbacks
-		MsTimer_AddCallback(&UpdateLeds, 100);
+		MsTimer_AddCallback(&UpdateLeds, 1000);
 		MsTimer_AddCallback(&UpdateStatusLeds, 500);
 		// Start timer
 		MsTimer_Start();
