@@ -1,0 +1,42 @@
+PCBNEW-LibModule-V1  5/10/2014 4:22:29 PM
+# encoding utf-8
+Units mm
+$INDEX
+PIN_ARRAY_2X1_3960um
+$EndINDEX
+$MODULE PIN_ARRAY_2X1_3960um
+Po 0 0 0 15 536E987A 00000000 ~~
+Li PIN_ARRAY_2X1_3960um
+Cd Connecteurs 2 pins
+Kw CONN DEV
+Sc 0
+AR 
+Op 0 0 0
+T0 -0.1 -4.8 0.762 0.762 0 0.1524 N V 21 N "PIN_ARRAY_2"
+T1 0 -3.5 0.762 0.762 0 0.1524 N I 21 N "Val**"
+DS -3.64 4.6 -3.64 -5.6 0.1524 21
+DS -3.6 -5.6 3.6 -5.6 0.1524 21
+DS 3.54 -5.6 3.54 4.6 0.1524 21
+DS 3.6 4.6 -3.6 4.6 0.1524 21
+$PAD
+Sh "1" R 2.3 2.3 0 0 0
+Dr 1.8 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po -1.98 0
+$EndPAD
+$PAD
+Sh "2" C 2.5 2.5 0 0 0
+Dr 1.8 0 0
+At STD N 00E0FFFF
+Ne 0 ""
+Po 1.98 0
+$EndPAD
+$SHAPE3D
+Na "pin_array/pins_array_2x1.wrl"
+Sc 1 1 1
+Of 0 0 0
+Ro 0 0 0
+$EndSHAPE3D
+$EndMODULE PIN_ARRAY_2X1_3960um
+$EndLIBRARY

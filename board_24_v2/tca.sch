@@ -35,9 +35,9 @@ EELAYER 27 0
 EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
-Sheet 1 3
+Sheet 1 2
 Title ""
-Date "25 jun 2014"
+Date "27 jun 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -386,8 +386,8 @@ $EndComp
 $Sheet
 S 6800 2450 2250 1200
 U 5362FF20
-F0 "tlcs_1-6" 50
-F1 "tlcs_1-6.sch" 50
+F0 "tlcs_1-3" 50
+F1 "tlcs_1-3.sch" 50
 F2 "XLAT" I L 6800 2600 60 
 F3 "SCLK" I L 6800 2750 60 
 F4 "SIN" I L 6800 2900 60 
@@ -427,36 +427,6 @@ Text Label 9200 3250 0    60   ~ 0
 VCC
 Text Label 5950 3200 2    60   ~ 0
 BLANK
-Text Label 6650 4400 2    60   ~ 0
-XLAT
-Text Label 6650 4550 2    60   ~ 0
-SCLK
-Text Label 6650 4850 2    60   ~ 0
-MODE
-Text Label 6650 5150 2    60   ~ 0
-GSCLK
-Text Label 9200 4600 0    60   ~ 0
-VIN
-Text Label 9200 5050 0    60   ~ 0
-VCC
-Text Label 6650 5000 2    60   ~ 0
-BLANK
-NoConn ~ 6800 5300
-$Sheet
-S 6800 4250 2250 1200
-U 53633D51
-F0 "tlcs_7-12" 50
-F1 "tlcs_7-12.sch" 50
-F2 "XLAT" I L 6800 4400 60 
-F3 "SCLK" I L 6800 4550 60 
-F4 "SIN" I L 6800 4700 60 
-F5 "MODE" I L 6800 4850 60 
-F6 "BLANK" I L 6800 5000 60 
-F7 "GSCLK" I L 6800 5150 60 
-F8 "VIN" I R 9050 4600 60 
-F9 "VCC" I R 9050 5050 60 
-F10 "SOUT" I L 6800 5300 60 
-$EndSheet
 $Comp
 L INDUCTOR L1
 U 1 1 53AA01D0
@@ -637,26 +607,6 @@ Wire Wire Line
 	9050 2800 9200 2800
 Wire Wire Line
 	9050 3250 9200 3250
-Wire Wire Line
-	6650 5000 6800 5000
-Wire Wire Line
-	6800 4400 6650 4400
-Wire Wire Line
-	6800 4550 6650 4550
-Wire Wire Line
-	6250 4700 6800 4700
-Wire Wire Line
-	6800 4850 6650 4850
-Wire Wire Line
-	6800 5150 6650 5150
-Wire Wire Line
-	9050 4600 9200 4600
-Wire Wire Line
-	9050 5050 9200 5050
-Wire Wire Line
-	6800 3500 6250 3500
-Wire Wire Line
-	6250 3500 6250 4700
 Wire Wire Line
 	6150 3150 6150 3200
 Connection ~ 6150 3200
