@@ -19,6 +19,7 @@
 
 #define OPERATION_MODE_CALIBRATION 1
 #define OPERATION_MODE_NORMAL 2
+#define OPERATION_MODE_TF 3
 #define OPERATION_MODE OPERATION_MODE_CALIBRATION
 
 // System states
@@ -56,27 +57,32 @@ typedef struct
 
 #define LPF_HEADER_LENGTH 32
 
+#if OPERATION_MODE == OPERATION_MODE_TF
+
+uint8_t randomizer[96] = {
+	12,5,11,47,6,18,20,1,
+	31,7,36,33,43,22,29,16,
+	39,42,32,13,17,28,9,40,
+	15,4,34,45,8,23,37,44,
+	25,24,38,3,46,14,21,26,
+	19,48,30,27,2,35,41,10,
+	90,93,59,67,61,84,68,55,
+	54,58,77,83,72,76,63,86,
+	66,78,50,69,60,64,71,88,
+	56,49,62,53,85,82,74,65,
+	79,96,73,95,89,87,75,92,
+	52,80,91,70,57,94,51,81
+};
+#endif
+
 // Periodic functions
 void UpdateLeds(void) {
-	#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
-		static Tlc5941_gsData_t k = 0;
-		while(Tlc5941_gsUpdateFlag);
-		
-		// Calibration submode 1: all constant
-		for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
-		{
-			if (i%2 == 1)
-			{
-				Tlc5941_SetGS(well2channel[i], (100UL*grayscaleCalibration[i])>>8);
-			}
-		}
-		
-		/*// Calibration submode 2: moving signal
-		Tlc5941_SetAllGS(0);
-		Tlc5941_SetGS(well2channel[k], 4095);
-		k = (k + 1) % Tlc5941_numChannels;*/
-		
-		Tlc5941_SetGSUpdateFlag();
+	#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION || OPERATION_MODE == OPERATION_MODE_TF)
+		Flag_Release(dataAvailableFlag);
+
+		// Set update flag for Tlc library
+		if (!Flag_HasFailedRelease(dataAvailableFlag))
+			Tlc5941_SetGSUpdateFlag();
 	#elif (OPERATION_MODE == OPERATION_MODE_NORMAL)
 		// Release data available flag
 		if (System_IsState(System_stateRunning))
@@ -166,7 +172,8 @@ int main(void) {
 		// Information holder for the lpf
 		lpfInfo_t lpfInfo;
 	
-		uint32_t temp = 0;
+		uint16_t temp16 = 0;
+		uint32_t temp32 = 0;
 
 		// Enable interruptions
 		sei();
@@ -174,6 +181,8 @@ int main(void) {
 		// Initialize TLC module
 		Tlc5941_Init();
 		// Set up grayscale value
+		Tlc5941_SetAllDC(8);
+		Tlc5941_ClockInDC();
 		Tlc5941_SetAllDC(8);
 		Tlc5941_ClockInDC();
 		// Default all grayscale values to off
@@ -234,7 +243,7 @@ int main(void) {
 				System_SetState(System_stateErrorWrongLpf);
 	
 			// Check appropriate file size
-			if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*3/2))
+			if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*2))
 				System_SetState(System_stateErrorWrongLpf);
 		}
 		// Switch to running state
@@ -244,7 +253,7 @@ int main(void) {
 		}
 	
 		// Assign callbacks to timer
-		if (System_IsState(System_stateInitializing))
+		if (System_IsState(System_stateRunning))
 			MsTimer_AddCallback(&UpdateLeds, lpfInfo.stepSize);
 		MsTimer_AddCallback(&UpdateStatusLeds, 500);
 		// Start timer
@@ -268,25 +277,25 @@ int main(void) {
 					continue;
 				}
 				// Read data from LPF
-				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels/2; i++)
+				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
 				{
-					// We get three bytes at a time, which contains two grayscale values
-					if (lpfFile.readBytes((char*)(&(temp)), 3) != 3)
+					// We get two bytes at a time, which contains one grayscale value
+					if (lpfFile.readBytes((char*)(&(temp16)), 2) != 2)
 					{
 						System_SetState(System_stateErrorLpfUnavailable);
-						continue;
+						break;
 					}
 					// Update LEDs
 					// No position decoding
-					Tlc5941_SetGS(i*2, (uint16_t)(temp & 0xFFF));
-					Tlc5941_SetGS(i*2 + 1, (uint16_t)((temp>>12) & 0xFFF));
+					// Tlc5941_SetGS(i, temp16);
 					// With position decoding
-					/*Tlc5941_SetGS(well2channel[i*2], (uint16_t)(temp & 0xFFF));
-					Tlc5941_SetGS(well2channel[i*2 + 1], (uint16_t)((temp>>12) & 0xFFF));*/
-					/*// With position decoding and calibration scaling
-					Tlc5941_SetGS(well2channel[i*2], ((uint16_t)(temp & 0xFFF)*grayscaleCalibration[i*2])/255);
-					Tlc5941_SetGS(well2channel[i*2 + 1], ((uint16_t)((temp>>12) & 0xFFF)*grayscaleCalibration[i*2 + 1])/255);*/
+					// Tlc5941_SetGS(well2channel[i], temp16);
+					// With position decoding and calibration scaling
+					Tlc5941_SetGS(well2channel[i], ((uint32_t)temp16*((uint16_t)grayscaleCalibration[i] + 1))>>8);
 				}
+				if (!System_IsState(System_stateRunning))
+					continue;
+				
 				// Increment time counter
 				lpfInfo.counterStep++;
 
@@ -305,7 +314,8 @@ int main(void) {
 			}
 		}
 		return 0;
-	#elif (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+	#elif (OPERATION_MODE == OPERATION_MODE_CALIBRATION || OPERATION_MODE == OPERATION_MODE_TF)
+	
 		// Enable interruptions
 		sei();
 	
@@ -314,11 +324,16 @@ int main(void) {
 		// Set up grayscale value
 		Tlc5941_SetAllDC(8);
 		Tlc5941_ClockInDC();
+		Tlc5941_SetAllDC(8);
+		Tlc5941_ClockInDC();
 		// Default all grayscale values to off
 		Tlc5941_SetAllGS(0);
 		// Force upload of grayscale values
 		Tlc5941_SetGSUpdateFlag();
 		while(Tlc5941_gsUpdateFlag);
+
+		// Signal that the first set of grayscale values should be used during the first iteration
+		Flag_Set(dataAvailableFlag);
 	
 		// Initialize Status LEDs
 		StatusLeds_Init();
@@ -331,9 +346,97 @@ int main(void) {
 		// Start timer
 		MsTimer_Start();
 	
-		while (1)
-		{
-		}
+		//while (1)
+		//{
+			// Wait until data has been consumed
+			while(Flag_IsSet(dataAvailableFlag));
+
+			// Wait until TLC library is done transmitting
+			while(Tlc5941_gsUpdateFlag);
+			
+			// Set grayscale values
+			#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
+				{
+					if (i%2 == 0)
+					{
+						Tlc5941_SetGS(well2channel[i], ((uint32_t)i*((uint16_t)grayscaleCalibration[i] + 1))>>8);
+					}
+				}
+			#elif (OPERATION_MODE == OPERATION_MODE_TF)
+				// Green/red tf:
+				for (Tlc5941_gsData_t i = 0; i < 96; i++)
+				{
+					// red
+					if (i%2 == 0)
+					{
+						Tlc5941_SetGS(well2channel[i], ((uint32_t)4095*((uint16_t)grayscaleCalibration[i] + 1))>>8);
+					}
+					// green
+					else
+					{
+						uint16_t intensity;
+						uint8_t j = (randomizer[i/2] - 1);
+						if (j <= 20)
+						intensity = j*5;
+						else if (j <= 30)
+						intensity = 100 + ((j-20)*10);
+						else if (j <= 35)
+						intensity = 200 + ((j-30)*20);
+						else if (j <= 39)
+						intensity = 300 + ((j-35)*50);
+						else if (j <= 42)
+						intensity = 500 + ((j-39)*100);
+						else if (j == 43)
+						intensity = 1000;
+						else if (j == 44)
+						intensity = 1500;
+						else if (j == 45)
+						intensity = 2000;
+						else if (j == 46)
+						intensity = 3000;
+						else if (j == 47)
+						intensity = 4095;
+						
+						Tlc5941_SetGS(well2channel[i], ((uint32_t)intensity*((uint16_t)grayscaleCalibration[i] + 1))>>8);
+					}
+				}
+				// Red tf:
+				Tlc5941_gsData_t well_index = 0; 
+				for (Tlc5941_gsData_t i = 96; i < 192; i++)
+				{
+					well_index = randomizer[i-96] - 1 + 96;
+					// red
+					if (i%2 == 0)
+					{
+						uint16_t intensity;
+						uint8_t j = (randomizer[i/2] - 1) - 48;
+						if (j <= 30)
+						intensity = j*15;
+						else if (j <= 40)
+						intensity = 450 + ((j-30)*30);
+						else if (j <= 46)
+						intensity = 1000 + ((j-41)*500);
+						else if (j == 47)
+						intensity = 4095;
+						Tlc5941_SetGS(well2channel[i], ((uint32_t)intensity*((uint16_t)grayscaleCalibration[i] + 1))>>8);
+					}
+					// green
+					else
+					{
+						Tlc5941_SetGS(well2channel[i], 0);
+					}
+				}
+			#endif
+
+			// Signal that data is ready for consumption
+			// This should be run as an atomic block
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+				Flag_Set(dataAvailableFlag);
+			}
+		//}
+		
+		while(1){}
 		return 0;
 	#endif
 }
