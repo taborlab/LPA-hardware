@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <util/atomic.h>
+#include <avr/pgmspace.h>
 
 #include "Arduino.h"
 #include <SD.h>
@@ -20,7 +21,7 @@
 #define OPERATION_MODE_CALIBRATION 1
 #define OPERATION_MODE_NORMAL 2
 #define OPERATION_MODE_TF 3
-#define OPERATION_MODE OPERATION_MODE_CALIBRATION
+#define OPERATION_MODE OPERATION_MODE_NORMAL
 
 // System states
 #define System_stateInitializing 0
@@ -172,8 +173,7 @@ int main(void) {
 		// Information holder for the lpf
 		lpfInfo_t lpfInfo;
 	
-		uint16_t temp16 = 0;
-		uint32_t temp32 = 0;
+		uint32_t temp = 0;
 
 		// Enable interruptions
 		sei();
@@ -277,21 +277,21 @@ int main(void) {
 					continue;
 				}
 				// Read data from LPF
-				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
+				for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
 				{
 					// We get two bytes at a time, which contains one grayscale value
-					if (lpfFile.readBytes((char*)(&(temp16)), 2) != 2)
+					if (lpfFile.readBytes((char*)(&(temp)), 2) != 2)
 					{
 						System_SetState(System_stateErrorLpfUnavailable);
 						break;
 					}
+					// Get well position and calibration
+					Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+					uint16_t calibration = pgm_read_byte(&(grayscaleCalibration[i]));
 					// Update LEDs
-					// No position decoding
-					// Tlc5941_SetGS(i, temp16);
-					// With position decoding
-					// Tlc5941_SetGS(well2channel[i], temp16);
-					// With position decoding and calibration scaling
-					Tlc5941_SetGS(well2channel[i], ((uint32_t)temp16*((uint16_t)grayscaleCalibration[i] + 1))>>8);
+					// uint32_t intensity = i*10;
+					// Tlc5941_SetGS(well, intensity*(calibration + 1)>>8);
+					Tlc5941_SetGS(well, temp*(calibration + 1)>>8);
 				}
 				if (!System_IsState(System_stateRunning))
 					continue;
@@ -345,96 +345,103 @@ int main(void) {
 		MsTimer_AddCallback(&UpdateStatusLeds, 500);
 		// Start timer
 		MsTimer_Start();
-	
-		//while (1)
-		//{
-			// Wait until data has been consumed
-			while(Flag_IsSet(dataAvailableFlag));
+		
+		// Wait until data has been consumed
+		while(Flag_IsSet(dataAvailableFlag));
 
-			// Wait until TLC library is done transmitting
-			while(Tlc5941_gsUpdateFlag);
+		// Wait until TLC library is done transmitting
+		while(Tlc5941_gsUpdateFlag);
 			
-			// Set grayscale values
-			#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
-				for (Tlc5941_gsData_t i = 0; i < Tlc5941_numChannels; i++)
+		// Set grayscale values
+		#if (OPERATION_MODE == OPERATION_MODE_CALIBRATION)
+			for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
+			{
+				// Get well position and calibration
+				Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+				uint16_t calibration = pgm_read_byte(&(grayscaleCalibration[i]));
+				if (i%2 == 1)
 				{
-					if (i%2 == 0)
-					{
-						Tlc5941_SetGS(well2channel[i], ((uint32_t)i*((uint16_t)grayscaleCalibration[i] + 1))>>8);
-					}
+					// Update LEDs
+					Tlc5941_SetGS(well, 511UL*(calibration + 1)>>8);
 				}
-			#elif (OPERATION_MODE == OPERATION_MODE_TF)
-				// Green/red tf:
-				for (Tlc5941_gsData_t i = 0; i < 96; i++)
-				{
-					// red
-					if (i%2 == 0)
-					{
-						Tlc5941_SetGS(well2channel[i], ((uint32_t)4095*((uint16_t)grayscaleCalibration[i] + 1))>>8);
-					}
-					// green
-					else
-					{
-						uint16_t intensity;
-						uint8_t j = (randomizer[i/2] - 1);
-						if (j <= 20)
-						intensity = j*5;
-						else if (j <= 30)
-						intensity = 100 + ((j-20)*10);
-						else if (j <= 35)
-						intensity = 200 + ((j-30)*20);
-						else if (j <= 39)
-						intensity = 300 + ((j-35)*50);
-						else if (j <= 42)
-						intensity = 500 + ((j-39)*100);
-						else if (j == 43)
-						intensity = 1000;
-						else if (j == 44)
-						intensity = 1500;
-						else if (j == 45)
-						intensity = 2000;
-						else if (j == 46)
-						intensity = 3000;
-						else if (j == 47)
-						intensity = 4095;
-						
-						Tlc5941_SetGS(well2channel[i], ((uint32_t)intensity*((uint16_t)grayscaleCalibration[i] + 1))>>8);
-					}
-				}
-				// Red tf:
-				Tlc5941_gsData_t well_index = 0; 
-				for (Tlc5941_gsData_t i = 96; i < 192; i++)
-				{
-					well_index = randomizer[i-96] - 1 + 96;
-					// red
-					if (i%2 == 0)
-					{
-						uint16_t intensity;
-						uint8_t j = (randomizer[i/2] - 1) - 48;
-						if (j <= 30)
-						intensity = j*15;
-						else if (j <= 40)
-						intensity = 450 + ((j-30)*30);
-						else if (j <= 46)
-						intensity = 1000 + ((j-41)*500);
-						else if (j == 47)
-						intensity = 4095;
-						Tlc5941_SetGS(well2channel[i], ((uint32_t)intensity*((uint16_t)grayscaleCalibration[i] + 1))>>8);
-					}
-					// green
-					else
-					{
-						Tlc5941_SetGS(well2channel[i], 0);
-					}
-				}
-			#endif
-
-			// Signal that data is ready for consumption
-			// This should be run as an atomic block
-			ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
-				Flag_Set(dataAvailableFlag);
 			}
-		//}
+		#elif (OPERATION_MODE == OPERATION_MODE_TF)
+			// Green/red tf:
+			for (Tlc5941_channel_t i = 0; i < 96; i++)
+			{
+				// Get well position and calibration
+				Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+				uint16_t calibration = pgm_read_byte(&(grayscaleCalibration[i]));
+				// red
+				if (i%2 == 0)
+				{
+					Tlc5941_SetGS(well, 4095UL*(calibration + 1)>>8);
+				}
+				// green
+				else
+				{
+					uint32_t intensity;
+					uint8_t j = (randomizer[i/2] - 1);
+					if (j <= 20)
+					intensity = j*5;
+					else if (j <= 30)
+					intensity = 100 + ((j-20)*10);
+					else if (j <= 35)
+					intensity = 200 + ((j-30)*20);
+					else if (j <= 39)
+					intensity = 300 + ((j-35)*50);
+					else if (j <= 42)
+					intensity = 500 + ((j-39)*100);
+					else if (j == 43)
+					intensity = 1000;
+					else if (j == 44)
+					intensity = 1500;
+					else if (j == 45)
+					intensity = 2000;
+					else if (j == 46)
+					intensity = 3000;
+					else if (j == 47)
+					intensity = 4095;
+						
+					Tlc5941_SetGS(well, intensity*(calibration + 1)>>8);
+				}
+			}
+			// Red tf:
+			Tlc5941_channel_t well_index = 0; 
+			for (Tlc5941_channel_t i = 96; i < 192; i++)
+			{
+				well_index = randomizer[i-96] - 1 + 96;
+				// Get well position and calibration
+				Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+				uint16_t calibration = pgm_read_byte(&(grayscaleCalibration[i]));
+				// red
+				if (i%2 == 0)
+				{
+					uint32_t intensity;
+					uint8_t j = (randomizer[i/2] - 1) - 48;
+					if (j <= 30)
+					intensity = j*15;
+					else if (j <= 40)
+					intensity = 450 + ((j-30)*30);
+					else if (j <= 46)
+					intensity = 1000 + ((j-41)*500);
+					else if (j == 47)
+					intensity = 4095;
+					Tlc5941_SetGS(well, intensity*(calibration + 1)>>8);
+				}
+				// green
+				else
+				{
+					Tlc5941_SetGS(well, 0);
+				}
+			}
+		#endif
+
+		// Signal that data is ready for consumption
+		// This should be run as an atomic block
+		ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+			Flag_Set(dataAvailableFlag);
+		}
 		
 		while(1){}
 		return 0;
