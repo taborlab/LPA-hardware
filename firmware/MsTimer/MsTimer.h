@@ -24,6 +24,7 @@ extern "C" {
 // Functions
 void MsTimer_Init(void);
 void MsTimer_Start(void);
+void MsTimer_Stop(void);
 void MsTimer_AddCallback(void (*callback)(void), uint32_t period);
 
 // Clock counter: Indicates time since counter startup in ms.

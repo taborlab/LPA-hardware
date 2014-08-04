@@ -39,6 +39,12 @@ void MsTimer_Start()
 	MsTimer_EnableInt();
 }
 
+void MsTimer_Stop()
+{
+	MsTimer_DisableTimer();
+	MsTimer_DisableInt();
+}
+
 void MsTimer_AddCallback(void (*callback)(void), uint32_t period)
 {
 	MsTimer_Callback[MsTimer_CallbackN] = callback;
