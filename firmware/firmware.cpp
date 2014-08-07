@@ -18,6 +18,11 @@
 #include "Tlc5941/Tlc5941.h"
 #include "MsTimer/MsTimer.h"
 
+// Dot correction value
+#ifndef dotCorrection
+#define dotCorrection 8
+#endif
+
 // System states
 #define System_stateInitializing 0
 #define System_stateRunning 1
@@ -152,9 +157,9 @@ int main(void) {
 	// Initialize TLC module
 	Tlc5941_Init();
 	// Set up grayscale value
-	Tlc5941_SetAllDC(2);
+	Tlc5941_SetAllDC(dotCorrection);
 	Tlc5941_ClockInDC();
-	Tlc5941_SetAllDC(2);
+	Tlc5941_SetAllDC(dotCorrection);
 	Tlc5941_ClockInDC();
 	// Default all grayscale values to off
 	Tlc5941_SetAllGS(0);
