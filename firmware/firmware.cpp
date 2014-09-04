@@ -156,11 +156,29 @@ int main(void) {
 	
 	// Initialize TLC module
 	Tlc5941_Init();
-	// Set up grayscale value
-	Tlc5941_SetAllDC(dotCorrection);
-	Tlc5941_ClockInDC();
-	Tlc5941_SetAllDC(dotCorrection);
-	Tlc5941_ClockInDC();
+	// Set up dot correction value
+	#ifndef individualDotCorrection
+		Tlc5941_SetAllDC(dotCorrection);
+		Tlc5941_ClockInDC();
+		Tlc5941_SetAllDC(dotCorrection);
+		Tlc5941_ClockInDC();
+	#else
+		// Set up individual values if defined
+		for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
+		{
+			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+			uint8_t dotCorrectionValue = pgm_read_byte(&(dotCorrectionValues[i]));
+			Tlc5941_SetDC(well, dotCorrectionValue);
+		}
+		Tlc5941_ClockInDC();
+		for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
+		{
+			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+			uint8_t dotCorrectionValue = pgm_read_byte(&(dotCorrectionValues[i]));
+			Tlc5941_SetDC(well, dotCorrectionValue);
+		}
+		Tlc5941_ClockInDC();
+	#endif
 	// Default all grayscale values to off
 	Tlc5941_SetAllGS(0);
 	// Force upload of grayscale values

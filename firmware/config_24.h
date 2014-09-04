@@ -63,5 +63,15 @@ static const uint8_t grayscaleCalibration[Tlc5941_numChannels]  PROGMEM = {
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,};
 	
-	
+// If dot correction should be the same in all wells, define its value in dotCorrection
+#define dotCorrection 4
 
+// If dot correction value should be different from well to well, define individualDotCorrection 
+// and set values in dotCorrectionValues
+#define individualDotCorrection 1
+static const uint8_t dotCorrectionValues[Tlc5941_numChannels]  PROGMEM = {
+	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
+	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
+	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
+	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,};
+	
