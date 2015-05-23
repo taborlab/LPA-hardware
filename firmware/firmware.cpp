@@ -240,6 +240,11 @@ int main(void) {
 		if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*2))
 			System_SetState(System_stateErrorWrongLpf);
 	}
+	// Scale step size
+	#ifdef stepSizeScaling
+		lpfInfo.stepSize = (uint32_t)((double)(lpfInfo.stepSize)*stepSizeScaling);
+	#endif
+
 	// Switch to running state
 	if (System_IsState(System_stateInitializing))
 	{

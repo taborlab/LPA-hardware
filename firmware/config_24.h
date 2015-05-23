@@ -75,3 +75,5 @@ static const uint8_t dotCorrectionValues[Tlc5941_numChannels]  PROGMEM = {
 	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
 	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,};
 	
+// Time step scaling
+#define stepSizeScaling 1.0
