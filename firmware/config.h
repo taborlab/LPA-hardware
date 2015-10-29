@@ -70,10 +70,10 @@ static const uint8_t grayscaleCalibration[Tlc5941_numChannels]  PROGMEM = {
 // and set values in dotCorrectionValues
 #define individualDotCorrection 1
 static const uint8_t dotCorrectionValues[Tlc5941_numChannels]  PROGMEM = {
-	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
-	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
-	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,
-	64, 8, 64, 8, 64, 8, 64, 8, 64, 8, 64, 8,};
-
+	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
+	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
+	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
+	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,};
+	
 // Time step scaling
 #define stepSizeScaling 1.0
