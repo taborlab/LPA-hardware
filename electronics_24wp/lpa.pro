@@ -4,7 +4,7 @@ last_client=kicad
 version=1
 [pcbnew]
 version=1
-LastNetListRead=tca.net
+LastNetListRead=lpa.net
 UseCmpFile=1
 PadDrill=0.000000000000
 PadDrillOvalY=0.000000000000
@@ -60,7 +60,7 @@ LabSize=60
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=tca-rescue
+LibName1=lpa-rescue
 LibName2=power
 LibName3=device
 LibName4=transistors
