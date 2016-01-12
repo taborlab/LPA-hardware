@@ -213,9 +213,9 @@ int main(void) {
 	File lpfFile;
 	// Information holder for the lpf
 	lpfInfo_t lpfInfo;
-	
+	// Temporary value for reading from the lpf
 	uint32_t temp = 0;
-	
+	// Flag that indicates whether the first frame has been loaded
 	uint8_t first_frame = 0;
 
 	// Enable interruptions
@@ -223,7 +223,7 @@ int main(void) {
 	
 	// Initialize TLC module
 	Tlc5941_Init();
-	// Default all grayscale values to off
+	// Default all grayscale values to zero
 	Tlc5941_SetAllGS(0);
 	// Force upload of grayscale values
 	Tlc5941_SetGSUpdateFlag();
@@ -267,13 +267,21 @@ int main(void) {
 			System_SetState(System_stateErrorNoSdFiles);
 		}
 	}
-	
-	// Set up dot correction values
-	for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
-	{
-		Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
-		Tlc5941_SetDC(well, dotCorrectionValues[i]);
+	// Set dot correction values
+	if (System_IsState(System_stateInitializing)) {
+		// Set from dotCorrectionValues array
+		for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
+		{
+			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+			Tlc5941_SetDC(well, dotCorrectionValues[i]);
+		}
 	}
+	else {
+		// Set all to zero
+		Tlc5941_SetAllDC(0);
+	}
+	// Push all DC values
+	Tlc5941_ClockInDC();
 	Tlc5941_ClockInDC();
 
 	// Process calibration file
@@ -345,7 +353,6 @@ int main(void) {
 		MsTimer_AddCallback(&UpdateLeds, lpfInfo.stepSize);
 		MsTimer_AddCallback(&UpdateStatusLeds, 500);
 		Flag_Reset(dataAvailableFlag);
-		first_frame = 1;
 	}
 	else
 	{
@@ -353,8 +360,8 @@ int main(void) {
 		// Start timer
 		MsTimer_Start();
 	}
+	first_frame = 1;
 	
-
 	// Do led intensity decoding as necessary
 	lpfFile.seek(LPF_HEADER_LENGTH);
 	while(1) {
@@ -409,14 +416,23 @@ int main(void) {
 					Flag_Set(dataAvailableFlag);
 				}
 			}
-			
+			// Start timer if first frame
+			if (first_frame)
+			{
+				MsTimer_Start();
+				first_frame = 0;
+			}
 			
 		}
-		// Start timer if first frame
-		if (first_frame)
-		{
-			MsTimer_Start();
-			first_frame = 0;
+		else {
+			// Set all grayscale to zero if first frame
+			if (first_frame) {
+				Tlc5941_SetAllGS(0);
+				Tlc5941_SetGSUpdateFlag();
+				while(Tlc5941_gsUpdateFlag);
+
+				first_frame = 0;
+			}
 		}
 	}
 	return 0;
