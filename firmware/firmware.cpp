@@ -6,6 +6,8 @@
  */ 
 
 // Headers
+#include <stdlib.h>
+#include <ctype.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <util/atomic.h>
@@ -18,10 +20,11 @@
 #include "Tlc5941/Tlc5941.h"
 #include "MsTimer/MsTimer.h"
 
-// Dot correction value
-#ifndef dotCorrection
-#define dotCorrection 8
-#endif
+// Array with dot correction values
+uint8_t dotCorrectionValues[Tlc5941_numChannels];
+
+// Array with grayscale calibration values
+uint8_t grayscaleCalibration[Tlc5941_numChannels];
 
 // System states
 #define System_stateInitializing 0
@@ -141,7 +144,71 @@ void timer0_init()
 	sbi(TIMSK0, TOIE0);
 }
 
+// This function parses a list of uint8 from a text file. It returns 1 if exactly
+// n_output numbers were extracted from the file and stored in output[], and 0
+// otherwise.
+uint8_t parseTextFile(File file, uint8_t output[], uint32_t n_output) {
+	// Index for the output array
+	uint32_t output_i = 0;
+	// text buffer
+	const uint8_t charBuffer_length = 50;
+	char charBuffer[charBuffer_length];
+	uint8_t charBuffer_i = 0;
+	char * charBufferPtr;
+	// Temporary container for the converted integer
+	uint16_t tempVal;
+
+	// Read characters until the end of the file is found
+	while (file.available()) {
+		charBuffer[0] = file.read();
+		// Only process if current character is not space
+		if (!isspace(charBuffer[0])) {
+			// If we already finished with the output array, return with error
+			if (output_i == n_output) {
+				return 0;
+			}
+			
+			// Fill buffer until a space or EOF are found.
+			charBuffer_i = 1;
+			while(file.available() && !isspace(file.peek()) && (charBuffer_i < charBuffer_length - 1)) {
+				charBuffer[charBuffer_i] = file.read();
+				charBuffer_i++;
+			}
+			// Return with error if the buffer overflows
+			if (file.available() && !isspace(file.peek())){
+				return 0;
+			}
+			// Add end of string character
+			charBuffer[charBuffer_i] = '\0';
+			
+			// Attempt to convert to integer, return with error if failed
+			// If the end pointer set by strtoul points to the end of the string, the
+			// entire string is valid.
+			// We also consider the value invalid if it cannot be cast to uint8_t
+			tempVal = strtoul(charBuffer, &charBufferPtr, 0);
+			if (charBufferPtr != (charBuffer + charBuffer_i) || tempVal > 255) {
+				return 0;
+			}
+			// Store in output array
+			output[output_i] = tempVal;
+			output_i++;
+		}
+	}
+	
+	// Check that we filled the array, return with error otherwise
+	if (output_i == n_output) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+}
+
 int main(void) {
+	// Dot correction file
+	File dcFile;
+	// Calibration file
+	File gcalFile;
 	// Light program file
 	File lpfFile;
 	// Information holder for the lpf
@@ -156,29 +223,6 @@ int main(void) {
 	
 	// Initialize TLC module
 	Tlc5941_Init();
-	// Set up dot correction value
-	#ifndef individualDotCorrection
-		Tlc5941_SetAllDC(dotCorrection);
-		Tlc5941_ClockInDC();
-		Tlc5941_SetAllDC(dotCorrection);
-		Tlc5941_ClockInDC();
-	#else
-		// Set up individual values if defined
-		for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
-		{
-			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
-			uint8_t dotCorrectionValue = pgm_read_byte(&(dotCorrectionValues[i]));
-			Tlc5941_SetDC(well, dotCorrectionValue);
-		}
-		Tlc5941_ClockInDC();
-		for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
-		{
-			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
-			uint8_t dotCorrectionValue = pgm_read_byte(&(dotCorrectionValues[i]));
-			Tlc5941_SetDC(well, dotCorrectionValue);
-		}
-		Tlc5941_ClockInDC();
-	#endif
 	// Default all grayscale values to off
 	Tlc5941_SetAllGS(0);
 	// Force upload of grayscale values
@@ -190,6 +234,10 @@ int main(void) {
 	
 	// Initialize Status LEDs
 	StatusLeds_Init();
+	// Turn on all LEDs
+	StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
+	StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
+	StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
 	
 	// Initialize ms timer
 	MsTimer_Init();
@@ -204,13 +252,52 @@ int main(void) {
 	{
 		System_SetState(System_stateErrorNoSdCard);
 	}
-	// Test if SD card is present
+
+	// Process dot correction file
+	if (System_IsState(System_stateInitializing)) {
+		dcFile = SD.open("dc.txt", FILE_READ);
+		if (dcFile) {
+			// Try to parse file contents, change to error state if unsuccessful
+			if (!parseTextFile(dcFile, dotCorrectionValues, Tlc5941_numChannels)) {
+				System_SetState(System_stateErrorWrongLpf);
+			}
+			dcFile.close();
+		}
+		else {
+			System_SetState(System_stateErrorNoLpf);
+		}
+	}
+	
+	// Set up dot correction values
+	for (Tlc5941_channel_t i = 0; i < Tlc5941_numChannels; i++)
+	{
+		Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
+		Tlc5941_SetDC(well, dotCorrectionValues[i]);
+	}
+	Tlc5941_ClockInDC();
+
+	// Process calibration file
+	if (System_IsState(System_stateInitializing)) {
+		gcalFile = SD.open("gcal.txt", FILE_READ);
+		if (gcalFile) {
+			// Try to parse file contents, change to error state if unsuccessful
+			if (!parseTextFile(gcalFile, grayscaleCalibration, Tlc5941_numChannels)) {
+				System_SetState(System_stateErrorWrongLpf);
+			}
+			gcalFile.close();
+		}
+		else {
+			System_SetState(System_stateErrorNoLpf);
+		}
+	}
+
+	// Load LPF
 	if (System_IsState(System_stateInitializing))
 	{
 		lpfFile = SD.open("program.lpf", FILE_READ);
 		if (!lpfFile) {
-				System_SetState(System_stateErrorNoLpf);
-			}
+			System_SetState(System_stateErrorNoLpf);
+		}
 	}
 
 	// Get headers from LPF
@@ -296,7 +383,7 @@ int main(void) {
 				}
 				// Get well position and calibration
 				Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
-				uint16_t calibration = pgm_read_byte(&(grayscaleCalibration[i]));
+				uint16_t calibration = grayscaleCalibration[i];
 				// Update LEDs
 				// uint32_t intensity = i*10;
 				// Tlc5941_SetGS(well, intensity*(calibration + 1)>>8);

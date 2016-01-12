@@ -56,24 +56,6 @@ static const Tlc5941_gsData_t well2channel[Tlc5941_numChannels] PROGMEM = {
 	13, 12, 2, 3, 29, 28, 18, 19, 45, 44, 34, 35,
 	11, 10, 4, 5, 27, 26, 20, 21, 43, 42, 36, 37,
 	9, 8, 6, 7, 25, 24, 22, 23, 41, 40, 38, 39,};
-
-static const uint8_t grayscaleCalibration[Tlc5941_numChannels]  PROGMEM = {
-	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
-	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,};
-	
-// If dot correction should be the same in all wells, define its value in dotCorrection
-#define dotCorrection 4
-
-// If dot correction value should be different from well to well, define individualDotCorrection 
-// and set values in dotCorrectionValues
-#define individualDotCorrection 1
-static const uint8_t dotCorrectionValues[Tlc5941_numChannels]  PROGMEM = {
-	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
-	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
-	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,
-	63, 8, 63, 8, 63, 8, 63, 8, 63, 8, 63, 8,};
 	
 // Time step scaling
 #define stepSizeScaling 1.0
