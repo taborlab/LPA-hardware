@@ -31,8 +31,8 @@ uint8_t grayscaleCalibration[Tlc5941_numChannels];
 #define System_stateRunning 1
 #define System_stateFinished 2
 #define System_stateErrorNoSdCard 3
-#define System_stateErrorNoLpf 4
-#define System_stateErrorWrongLpf 5
+#define System_stateErrorNoSdFiles 4
+#define System_stateErrorWrongSdFiles 5
 #define System_stateErrorTimeout 6
 #define System_stateErrorLpfUnavailable 7
 
@@ -98,12 +98,12 @@ void UpdateStatusLeds(void) {
 		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
 		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
 		break;
-	case System_stateErrorNoLpf:
+	case System_stateErrorNoSdFiles:
 		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_Off);
 		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
 		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_On);
 		break;
-	case System_stateErrorWrongLpf:
+	case System_stateErrorWrongSdFiles:
 		StatusLeds_Set(StatusLeds_LedOn, StatusLeds_On);
 		StatusLeds_Set(StatusLeds_LedErr, StatusLeds_On);
 		StatusLeds_Set(StatusLeds_LedFin, StatusLeds_Off);
@@ -259,12 +259,12 @@ int main(void) {
 		if (dcFile) {
 			// Try to parse file contents, change to error state if unsuccessful
 			if (!parseTextFile(dcFile, dotCorrectionValues, Tlc5941_numChannels)) {
-				System_SetState(System_stateErrorWrongLpf);
+				System_SetState(System_stateErrorWrongSdFiles);
 			}
 			dcFile.close();
 		}
 		else {
-			System_SetState(System_stateErrorNoLpf);
+			System_SetState(System_stateErrorNoSdFiles);
 		}
 	}
 	
@@ -282,12 +282,12 @@ int main(void) {
 		if (gcalFile) {
 			// Try to parse file contents, change to error state if unsuccessful
 			if (!parseTextFile(gcalFile, grayscaleCalibration, Tlc5941_numChannels)) {
-				System_SetState(System_stateErrorWrongLpf);
+				System_SetState(System_stateErrorWrongSdFiles);
 			}
 			gcalFile.close();
 		}
 		else {
-			System_SetState(System_stateErrorNoLpf);
+			System_SetState(System_stateErrorNoSdFiles);
 		}
 	}
 
@@ -296,7 +296,7 @@ int main(void) {
 	{
 		lpfFile = SD.open("program.lpf", FILE_READ);
 		if (!lpfFile) {
-			System_SetState(System_stateErrorNoLpf);
+			System_SetState(System_stateErrorNoSdFiles);
 		}
 	}
 
@@ -305,7 +305,7 @@ int main(void) {
 	{
 		if (lpfFile.size() < LPF_HEADER_LENGTH)
 		{
-			System_SetState(System_stateErrorWrongLpf);
+			System_SetState(System_stateErrorWrongSdFiles);
 		}
 		else
 		{
@@ -321,11 +321,11 @@ int main(void) {
 	{
 		// Check appropriate number of channels
 		if (lpfInfo.numberChannels != Tlc5941_numChannels)
-			System_SetState(System_stateErrorWrongLpf);
+			System_SetState(System_stateErrorWrongSdFiles);
 	
 		// Check appropriate file size
 		if (lpfFile.size() != (LPF_HEADER_LENGTH + lpfInfo.numberSteps*lpfInfo.numberChannels*2))
-			System_SetState(System_stateErrorWrongLpf);
+			System_SetState(System_stateErrorWrongSdFiles);
 	}
 	// Scale step size
 	#ifdef stepSizeScaling
