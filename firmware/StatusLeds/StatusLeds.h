@@ -13,9 +13,9 @@ extern "C" {
 #define STATUSLEDS_H_
 
 // LED identifiers
-#define StatusLeds_LedOn 5
+#define StatusLeds_LedOn 3
 #define StatusLeds_LedErr 4
-#define StatusLeds_LedFin 3
+#define StatusLeds_LedFin 5
 
 // LED status
 #define StatusLeds_On 1
