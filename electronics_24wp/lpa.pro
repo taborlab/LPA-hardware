@@ -87,4 +87,4 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
-LibName30=libraries/myParts
+LibName30=libraries/LPA_parts

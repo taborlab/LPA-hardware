@@ -28,7 +28,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:myParts
+LIBS:LPA_parts
 LIBS:lpa-cache
 EELAYER 25 0
 EELAYER END
