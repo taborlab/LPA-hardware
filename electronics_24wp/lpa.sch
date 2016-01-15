@@ -170,7 +170,7 @@ F 3 "~" H 4750 6850 60  0000 C CNN
 	-1   0    0    -1  
 $EndComp
 $Comp
-L LED ERR1
+L LED-INV ERR1
 U 1 1 5356E77E
 P 4750 6550
 F 0 "ERR1" H 4750 6650 50  0000 C CNN
@@ -178,7 +178,7 @@ F 1 "LED" H 4750 6450 50  0000 C CNN
 F 2 "LPA_parts:SM0805" H 4750 6550 60  0001 C CNN
 F 3 "~" H 4750 6550 60  0000 C CNN
 	1    4750 6550
-	-1   0    0    -1  
+	1    0    0    1   
 $EndComp
 $Comp
 L LED ON1
