@@ -1,4 +1,4 @@
-(module TLC5940_THERMVIAS (layer F.Cu) (tedit 56972693)
+(module TLC5941 (layer F.Cu) (tedit 56972693)
   (descr "TSSOP 28 pins")
   (tags "CMS TSSOP SMD")
   (attr smd)

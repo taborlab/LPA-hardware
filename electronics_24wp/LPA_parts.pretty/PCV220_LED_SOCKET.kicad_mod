@@ -1,4 +1,4 @@
-(module PCV220_LEDSOCKET (layer F.Cu) (tedit 53AB4396)
+(module PCV220_LED_SOCKET (layer F.Cu) (tedit 53AB4396)
   (fp_text reference D1 (at 0 -3.81) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
