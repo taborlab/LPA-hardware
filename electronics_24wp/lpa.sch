@@ -234,7 +234,7 @@ Text Label 3500 5300 0    60   ~ 0
 BLANK
 Text Label 3500 3500 0    60   ~ 0
 XLAT
-Text Label 1300 3300 2    60   ~ 0
+Text Label 1300 3050 2    60   ~ 0
 VCC
 NoConn ~ 1350 4000
 $Comp
@@ -515,11 +515,7 @@ Wire Wire Line
 	3250 5400 3500 5400
 Wire Wire Line
 	3250 5100 3500 5100
-Wire Wire Line
-	800  3500 900  3500
 Connection ~ 800  3700
-Wire Wire Line
-	800  3700 900  3700
 Wire Wire Line
 	3600 4600 4100 4600
 Wire Wire Line
@@ -535,13 +531,13 @@ Connection ~ 1300 3500
 Wire Wire Line
 	1200 3700 1350 3700
 Wire Wire Line
-	1300 3300 1300 3700
+	1300 3050 1300 3700
 Wire Wire Line
 	1350 3400 1300 3400
 Wire Wire Line
 	1200 3500 1350 3500
 Wire Wire Line
-	800  3500 800  5850
+	800  3300 800  5850
 Wire Wire Line
 	800  5500 1350 5500
 Wire Wire Line
@@ -687,4 +683,25 @@ Wire Wire Line
 	5450 4800 5700 4800
 Wire Wire Line
 	5450 4500 5700 4500
+Wire Wire Line
+	800  3500 900  3500
+Wire Wire Line
+	800  3700 900  3700
+$Comp
+L C C11
+U 1 1 569F3F37
+P 1050 3300
+F 0 "C11" H 1050 3400 40  0000 L CNN
+F 1 "0.1 uF" H 1056 3215 40  0000 L CNN
+F 2 "LPA_parts:SM0805" H 1088 3150 30  0001 C CNN
+F 3 "~" H 1050 3300 60  0000 C CNN
+	1    1050 3300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	800  3300 900  3300
+Connection ~ 800  3500
+Wire Wire Line
+	1200 3300 1300 3300
+Connection ~ 1300 3300
 $EndSCHEMATC
