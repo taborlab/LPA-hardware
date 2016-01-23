@@ -35,12 +35,12 @@ EELAYER END
 $Descr USLetter 11000 8500
 encoding utf-8
 Sheet 1 2
-Title ""
-Date "27 jun 2014"
-Rev ""
-Comp ""
-Comment1 ""
-Comment2 ""
+Title "LPA-24 PCB"
+Date "2016-01-23"
+Rev "4"
+Comp "Tabor Lab"
+Comment1 "Evan Olson"
+Comment2 "Sebastian Castillo-Hair"
 Comment3 ""
 Comment4 ""
 $EndDescr
