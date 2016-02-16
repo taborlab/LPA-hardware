@@ -223,9 +223,14 @@ int main(void) {
 	
 	// Initialize TLC module
 	Tlc5941_Init();
-	// Default all grayscale values to zero
+	// Set all dot correction values to zero
+	Tlc5941_SetAllDC(0);
+	// Push DC values
+	Tlc5941_SetDCUpdateFlag();
+	while(Tlc5941_dcUpdateFlag);
+	// Set all grayscale values to zero
 	Tlc5941_SetAllGS(0);
-	// Force upload of grayscale values
+	// Push grayscale values
 	Tlc5941_SetGSUpdateFlag();
 	while(Tlc5941_gsUpdateFlag);
 
@@ -275,14 +280,10 @@ int main(void) {
 			Tlc5941_channel_t well = pgm_read_byte(&(well2channel[i]));
 			Tlc5941_SetDC(well, dotCorrectionValues[i]);
 		}
+		// Push DC values
+		Tlc5941_SetDCUpdateFlag();
+		while(Tlc5941_dcUpdateFlag);
 	}
-	else {
-		// Set all to zero
-		Tlc5941_SetAllDC(0);
-	}
-	// Push all DC values
-	Tlc5941_ClockInDC();
-	Tlc5941_ClockInDC();
 
 	// Process calibration file
 	if (System_IsState(System_stateInitializing)) {
