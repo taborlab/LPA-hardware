@@ -1,0 +1,8 @@
+Ordering the pre-assembled parts
+================================
+
+First, download the most recent set of `files for manufacturing <https://github.com/rice-bioe/LPA-hardware/releases/download/0.9/lpa.zip>`_.
+
+Files xxx, xxx, and xxx in folder www are to be sent to aaa.
+
+Files xxx and xxx in folder yyy are to be sent to bbb.
