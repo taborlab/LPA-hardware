@@ -11,8 +11,8 @@ Main files
 Libraries
 ---------
 - libraries : folder with schematic diagram part libraries
-- lpa.cmp: footprint information file, used by the layout editor
-- lpa-rescue.lib: Schematic part library
+- LPA_parts.pretty: folder with PCB layout diagram part libraries
+- fp-lib-table: file listing the PCB layout diagram part libraries used by this project
 - lpa-cache.lib: Part library cache, from which parts can be loaded if not found in the standard libraries.
 
 How to use
