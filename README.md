@@ -1,10 +1,10 @@
 # LPA - The Light Plate Apparatus
-## An optogenetic device for n-well plates.
+## A device for optogenetic experiments in 24-well plates.
 
-The TCA is a device for n-well plates capable of illuminating each well with two independently time-varying light signals. An electronic board based on the Atmega328 microcontroller reads light intensity values from an SD card and controls the LEDs responsible for illumination.
+The LPA is a device capable of illuminating each well of a 24-well plate with two independently time-varying light signals. An electronic board based on the Atmega328 microcontroller reads light intensity values from an SD card and controls the LEDs responsible for illumination.
 
 ### Contents:
-* 3D printed parts: 3D models of the structural elements of the LPA, in SolidWorks and STL format.
-* electronics_24wp: Schematics and Layout of the electronic board for a 24-well device, in KiCAD format.
-* firmware: Source files of the microcontroller's firmware, in C++, organized as an Atmel Studio project.
-* laset cut gaskets: Diagrams of the rubber gaskets, in DXF (AutoCAD) format.
+* 3D printed parts: Models of the structural 3D-printed elements of the LPA, in SolidWorks format.
+* electronic board: Schematics and layout of the electronic board, in KiCAD format.
+* firmware: Source files of the microcontroller's firmware in C++, organized as an Atmel Studio project.
+* laser cut gaskets: Diagrams of the rubber gaskets, in DXF (AutoCAD) format.
