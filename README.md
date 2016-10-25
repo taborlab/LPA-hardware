@@ -7,4 +7,5 @@ The LPA is a device capable of illuminating each well of a 24-well plate with tw
 * 3D printed parts: Models of the structural 3D-printed elements of the LPA, in SolidWorks format.
 * electronic board: Schematics and layout of the electronic board, in KiCAD format.
 * firmware: Source files of the microcontroller's firmware in C++, organized as an Atmel Studio project.
-* laser cut gaskets: Diagrams of the rubber gaskets, in DXF (AutoCAD) format.
+* gaskets: Diagrams of the rubber gaskets, in DXF (AutoCAD) format.
+* LED calibration: Scripts for imager-based LED calibration, in matlab format, and examples.
