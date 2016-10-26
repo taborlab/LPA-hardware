@@ -1,0 +1,24 @@
+This is a HowTo for running the Image analysis calibration script(s). Carefully read the supplementary procedure on "Calibrating LEDs" (Supplementary Procedure 8) before proceeding. Example images, which 'analysis.m" and "calibration.m" are preconfigured to run with, and example output files can be inspected in the "examples" folder. Visit taborlab.rice.edu for updates.
+
+1. You should at this point have two .tif images for an LED set within a device: (1) normal orientation and (2) transposed orientation. The images should have the same name, but with "_T" appended to the transposed image name, e.g. "round1.tif" and "round1_T.tif". Move these image files to a folder in the same directory as the script files.  Open "analysis.m".
+
+2. Specify, in single quotes the following:
+	a. the path for the images on line 3, after "folder = ". e.g. "folder = 'example/arya_678nm_bot_150802/'"
+	b. the image root file name on line 4, after "folder ". e.g. "im_filename = [folder 'round1'];"
+Run "analysis.m".
+
+3. Two .csv files appended with "_raw" and "_rel" should be automatically generated in your image directory. These .csv files contain the intensity values (arbitrary or relative units) for each LED. The next script to run, "calibration.m" uses these files. Open "calibration.m".
+
+4.  Specify the following:
+	a. on line 12, the current calibration round (going through multiple rounds of calibration can improve results). e.g. "calibration_round = 1;"
+	b. on line 14-15, the image file path. 
+		e.g. "folder_ch1 = 'example/arya_678nm_bot_150802/';
+		     "folder_ch2 = 'example/arya_678nm_bot_150802/';"
+	c. on line 17, the name of the "_raw" LED intensity .csv file. e.g. "filename = [strtrim(folders(channel,:)) 'round1_raw.csv'];"
+	d. there is the optional abilitiy to specify which "channel" (ch1/ch2) the LEDs are in the device. 
+Run "calibration.m".
+
+5. A new "calibration" .csv file should be generated which contains the grayscale values to assign each LED. Replace the old grayscale values with these new values in your .gs file. In the first round of calibration, it is assumed all grayscale value were 255. In subsequent rounds, the script will assume the current grayscale values are the values generated in the previous round.
+
+6. Take images, as before, with these new grayscale values. Use "analysis.m" to verify satisfactory results. Iterate if necessary.
+
