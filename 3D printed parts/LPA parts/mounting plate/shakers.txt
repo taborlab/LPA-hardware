@@ -1,4 +1,1 @@
 "SI9R": Shel Lab SI9/SI9R
-"mini orbital": VWR mini-shaker 15 mm
-"Percival": Innova 2100 (hole diameter may need to be increased)
-"30C": Innova 2300
