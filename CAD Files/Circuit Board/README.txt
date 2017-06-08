@@ -19,3 +19,7 @@ How to use
 ==========
 Electronic CAD files were created on KiCAD, which can be downloaded from http://kicad-pcb.org/.
 To see the CAD files, open KiCAD, go to File -> Open Project, and select "lpa.pro". KiCAD will show a list of files on its left panel. The most important are lpa.sch (schematic diagram) and lpa.kicad_pcb (printed circuit board (PCB) diagram). Double click on each to open.
+
+About gerber files
+==================
+Gerber files for production were generated according to these instructions: http://docs.oshpark.com/design-tools/kicad/generating-kicad-gerbers/.
