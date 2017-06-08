@@ -2752,7 +2752,7 @@
       (net 17 GND))
   )
 
-  (gr_text "LPA v4.0\nTabor Lab" (at 73.406 108.966 90) (layer F.SilkS)
+  (gr_text "LPA v1.1\nTabor Lab" (at 73.406 108.966 90) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text . (at 70.866 88.392) (layer F.SilkS)
