@@ -1,7 +1,7 @@
-firmware/Debug/
-*/Thumbs.db
-
+Firmware/Source/Debug/
 *.atsuo
 *.atsln
+*.componentinfo.xml
 
+*/Thumbs.db
 desktop.ini
