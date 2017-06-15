@@ -1,0 +1,5 @@
+The following files should be regenerated before a new release/commit to master, in order to avoid mismatches between source files and files intended for production:
+
+- "CAD Files/3D Printed Parts": All .STL files should be regenerated from SolidWorks files.
+- "CAD Files/Circuit Board": All files in "Production Files" folder should be regenerated from KiCAD files. Gerber and drill files have been generated following the instructions here: http://docs.oshpark.com/design-tools/kicad/generating-kicad-gerbers/. Files "LPA_BOM.xlsx" and "LPA_component.xlsx" should be remade by hand.
+- "Firmware": File "firmware.elf" in the "Compiled" folder should be regenerated from the source in the "Source" folder. File "fuses.txt" should be directly copied from the "Source" folder.
