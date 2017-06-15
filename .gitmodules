@@ -1,3 +1,3 @@
 [submodule "Firmware/Tlc5941"]
-	path = Firmware/Tlc5941
+	path = Firmware/Source/Tlc5941
 	url = https://github.com/castillohair/Tlc5941_library
