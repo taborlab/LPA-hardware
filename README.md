@@ -2,7 +2,7 @@
 
 The LPA is a device capable of illuminating each well of a 24-well plate with two independently time-varying light signals. An electronic board based on the Atmega328 microcontroller reads light intensity values from an SD card and controls the LEDs responsible for illumination.
 
-This repository contains source files, needed to modify the LPA's design. To obtain the most recent files for building and using an LPA, visit the [releases](https://github.com/taborlab/LPA-hardware/releases) tab.
+This repository contains the source files needed to modify the LPA's design. To obtain the most recent files for building and using an LPA, visit the [releases](https://github.com/taborlab/LPA-hardware/releases) tab.
 
 If you use the LPA in your research, please cite [Gerhardt, et al. "An open-hardware platform for optogenetics and photobiology." Scientific Reports 6 (2016)](https://www.nature.com/articles/srep35363).
 
