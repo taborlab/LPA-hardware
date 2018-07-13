@@ -17,8 +17,8 @@ If you use the LPA in your research, please cite [Gerhardt, et al. "An open-hard
 * Image analysis script: Scripts for imager-based LED calibration, in matlab format, and examples.
 
 ### FAQ:
-[Where can I find a 1:1 scale image of the gaskets or their dimensions?](#q-where-can-i-find-a-11-scale-image-of-the-gaskets-or-their-dimensions?)  
-[The circuit board component parts list calls for a quantity of 0.15 breakaway headers per LPA. What does that mean?](#q-the-circuit-board-component-parts-list-calls-for-a-quantity-of-015-breakaway-headers-per-LPA-what-does-that-mean?)
+[Where can I find a 1:1 scale image of the gaskets or their dimensions?](#q-where-can-i-find-a-11-scale-image-of-the-gaskets-or-their-dimensions)  
+[The circuit board component parts list calls for a quantity of 0.15 breakaway headers per LPA. What does that mean?](#q-the-circuit-board-component-parts-list-calls-for-a-quantity-of-015-breakaway-headers-per-LPA-what-does-that-mean)
 
 ###### Q: Where can I find a 1:1 scale image of the gaskets or their dimensions?  
 A: Answer
