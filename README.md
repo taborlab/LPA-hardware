@@ -111,12 +111,42 @@ Diagnosis: All other attempts to troubleshoot fail.
 Solution: (1) Desolder bad microcontroller (huge pain) and re-solder a new one. (2) Start over.
 
 
-##### Q: I'm having trouble getting started programming the firmware, are there a set of quick instructions?
-A:
-1. Download/install Atmel Studio 7.0  (web installer).
-2. Open the "config" file in "Firmware\Source".
-4. Plug in AVRISP mkii (programmer) to computer usb (wait ~10s for computer to recognize device).
-5. Power LPA and connect to programmer, programmer indicator LED should change from red to green.
-6. Select AVRISP mkII as tool, ATmega328 as device, ISP as interface. Ensure device signature and voltage read normally.
+##### Q: What files need to be on the SD card to run the LPA?
+A: There need to be three files: dc.txt, gcal.txt, and program.lpf. The LPA will ignore any other files on the SD card.
 
-Subsequent steps in documentation.  
+##### Q: I'm having trouble programming the firmware, is there a set of quick instructions I can follow?
+A:
+1. Download/install Atmel Studio 7.0  (web installer)
+2. Plug in AVRISP mkii (programmer) to computer usb (wait ~10s for computer to recognize device)
+3. Power LPA and connect to programmer, programmer indicator LED should change from red to green
+4. In Atmel Studio go to Tools>Device Programming. Select AVRISP mkII as tool, ATmega328 as device, ISP as interface. Press read device signature and voltage (3.3 V).
+5. Click on the "Fuses" tab. Use the settings below (also found in Firmware>Compiled>fuses.txt) and then click Program.  
+    LPA v1.0: uncheck CKDIV8 box, check CKOUT box, and set SUT_CKSEL to EXTXOSC_8MHZ_XX_1KCK_14CK_65MS.  
+    LPA v1.1: uncheck CKDIV8 box, check CKOUT box, and set SUT_CKSEL to EXTXOSC_8MHZ_XX_16KCK_14CK_65MS.   
+6. Click on the "Production File" tab. Click the "..." button under "Program device from ELF production file". Select fimware.elf located in Firmware>Compiled. Activate the "Flash", "Erase memory before programming", and "Verify programmed content" boxes. Click the "Program" button. Your LPA should now be programmed.
+
+##### Q: The power supply is not listed in the BOM, what should I use?
+A: The BOM only includes PCB components. The power supply should be a 5V DC switching power supply. See documentation.
+
+##### Q: The company assembling LPA v1.0 for me noted that the TAB pin on the voltage regulator (LD1117S33TR) is internally connected to VOUT, but the corresponding pad on the circuit board is not routed to anything. Would you recommend keeping it this way?
+A: We do not know why the company pointed this out. Soldering that pin is only for structural support and heat dissipation. We do not recommend modifying the routing of that pad.
+
+##### Q: What LEDs should I use with the LPA?
+A: Any standard 5 mm LED can be used with the LPA. The wavelength you use depends on your optogenetic system and experiment. For examples see:  
+
+[Gerhardt, et al. "An open-hardware platform for optogenetics and photobiology." Scientific Reports 6 (2016)](https://www.nature.com/articles/srep35363)   
+
+[Olson, et al. "A photoconversion model for full spectral programming and multiplexing of optogenetic systems." Molecular Systems Biology 13(4) (2017)](http://msb.embopress.org/content/13/4/926)
+
+##### Q: It looks like the LPA LEDs are underneath the plate, but the paper mentions a top and bottom configuration.  Which is it?
+A: Each well has two LEDs which sit underneath the culture plate. When looking at an LPA well from a top-down perspective (as in [Figure 1a.](https://www.nature.com/articles/srep35363)) we refer to these as the top and bottom LED positions.
+
+
+##### Q: What shaking incubators is the LPA compatible with?
+A: Unless your shaker platform has the same hole pattern as ours (Shel Labs SI9/SI9R), you will need to modify the mounting plate (CAD Files>3D Printed Parts>LPA Parts>mounting plate) to your shaker platform specifications. Otherwise, the LPA is compatible with any shaker.
+
+##### Q: Do you have plans to release the LPA with other well formats (e.g. 12-well, 96-well)?
+A: Not currently. We were working on a 96-well prototype, but found it produced too much heat to be useful. Building and running multiple LPAs in parallel has worked well for us.
+
+##### Q: Can I use an alternative plate/well format with the LPA?
+A: You can try, but unfortunately the LPA is designed around one specific culture plate. If you use a different plate, the wells may not align with the LEDs and the outer plate dimensions may not fit the plate adapter. You are likely to get non-uniform illumination and cross-illumination between wells. We encourage users to modify the LPA designs to their own specifications and share on github.
