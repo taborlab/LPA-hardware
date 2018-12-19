@@ -17,7 +17,6 @@ If you use the LPA in your research, please cite [Gerhardt, et al. "An open-hard
 * Image analysis script: Scripts for imager-based LED calibration, in matlab format, and examples.
 
 ### FAQ:
-
 ##### Q: What should I do if my question isn't addressed in this FAQ?
 A: Check the [issues](https://github.com/taborlab/LPA-hardware/issues) (including closed issues) or raise a new issue on github.
 
@@ -73,10 +72,11 @@ A: Most likely, this is either an issue with the drivers on your computer (easie
 ##### Q: Atmel Studio recognizes my programmer, but it does not read the microcontroller or I get an error message when trying to program the device:
 A: There are several possible reasons to encounter this problem which all point to not having good/clean soldering job. In this order ensure that the following is true:
 
-1. The power regulator is receiving 5 V DC and outputing 3.3 V to the microcontroller VCC pin.
-2. Every component pin (especially the microcontroller pins) align and conduct with the corresponding pad on the circuit board.
-3. There are no bridged connections anywhere on the board.
-4. There is no solder debris (e.g. lead flakes) causing a short anywhere on the board or on any component.
+1. The power regulator is receiving 5 V DC and outputing 3.3 V to the microcontroller VCC pins.
+2. Voltage between microcontroller VCC pins and GND pins reads 3.3V.
+4. Every pin of every component (especially the microcontroller pins) aligns and conducts with it's corresponding pad on the circuit board.
+5. There are no bridged connections anywhere on the board.
+6. There is no solder debris (e.g. lead flakes) causing a short anywhere on the board or on any component.
 
 ##### Q: Once the firmware has been programmed, does the LPA need to be connected to a computer in order to run?
 A: No, once the firmware has been programmed the LPA requires no external connection other than a 5V power supply.
