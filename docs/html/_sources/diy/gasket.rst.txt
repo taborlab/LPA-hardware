@@ -1,4 +1,0 @@
-DIY gasket fabrication
-=============================
-
-todo.

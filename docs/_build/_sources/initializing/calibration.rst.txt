@@ -1,4 +1,0 @@
-LED calibration
-===============
-
-todo.

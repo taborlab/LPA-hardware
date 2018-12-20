@@ -1,7 +1,0 @@
-Papers which use LPAs
-============================
-
-.. toctree::
-   :maxdepth: 1
-
-   paper

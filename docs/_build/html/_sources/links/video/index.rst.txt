@@ -1,8 +1,0 @@
-Video tutorials
-============================
-
-.. toctree::
-   :maxdepth: 1
-
-   soldering
-   
