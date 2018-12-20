@@ -20,8 +20,7 @@ Table of Contents
 
    FAQ/faq.rst
    specifications/index.rst
-   diy/index.rst
-   commercial/index.rst
+   fab/index.rst
    initializing/index.rst
    using/index.rst
    contribute/index.rst
@@ -33,5 +32,5 @@ Useful Links
 .. toctree::
   :maxdepth: 1
 
-  links/papers.rst
   links/videos.rst
+  links/papers.rst

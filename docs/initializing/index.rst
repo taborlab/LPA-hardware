@@ -4,5 +4,6 @@ Initializing a new device
 .. toctree::
    :maxdepth: 1
 
-   firmware.rst
-   calibration.rst
+   firmware/index.rst
+   calibration_led.rst
+   calibration_time.rst

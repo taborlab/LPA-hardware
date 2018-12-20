@@ -1,4 +1,0 @@
-Programming the firmware
-========================
-
-todo.

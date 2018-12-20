@@ -1,4 +1,4 @@
-DIY fabrication and assembly
+Fabrication and assembly
 ============================
 
 .. toctree::
@@ -7,3 +7,4 @@ DIY fabrication and assembly
    board.rst
    3d.rst
    gasket.rst
+   final.rst

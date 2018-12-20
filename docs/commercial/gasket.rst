@@ -1,4 +1,0 @@
-Commercial gasket fabrication
-=============================
-
-todo.
