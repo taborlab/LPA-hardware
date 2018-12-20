@@ -1,4 +1,0 @@
-LPA final assembly
-==================
-
-todo.

@@ -1,12 +1,9 @@
-Assemble your own LPA
-=====================
+DIY fabrication and assembly
+============================
 
 .. toctree::
    :maxdepth: 1
 
-   order.rst
-   solder.rst
-   firmware.rst
-   3d_print.rst
-   assemble.rst
-   
+   board.rst
+   3d.rst
+   gasket.rst

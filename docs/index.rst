@@ -5,21 +5,33 @@
 
 The Light Plate Apparatus (LPA)
 ===============================
-test test test
+.. image:: device_img.png
+
 The LPA is a general purpose, customizable, user-friendly, open-source instrument for performing optogenetics and other photobiology experiments in batch and adherent cell culture systems. Using the LPA, each well of a 24-well plate can be independently exposed to variable intensity, millisecond time-scale signals from one or two LEDs.
 
-If you use the LPA in your research, please cite the following publication:
+If you use the LPA in your research, please cite "Gerhardt, et al. **An open-hardware platform for optogenetics and photobiology**. *Scientific Reports* 6 (2016)".
 
-- Gerhardt K. et al. **The Light Plate Apparatus (LPA): a flexible, low cost, user-friendly hardware platform for optogenetics and photobiology**. *ACS Synth. Biol*, 2016.
 
 Table of Contents
 =================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 1
 
-   preassembled/index.rst
+   FAQ/faq.rst
+   specifications/index.rst
    diy/index.rst
+   commercial/index.rst
+   initializing/index.rst
    using/index.rst
-   implementation/index.rst
    contribute/index.rst
+
+
+Useful Links
+------------------
+
+.. toctree::
+  :maxdepth: 1
+
+  links/papers.rst
+  links/videos.rst
