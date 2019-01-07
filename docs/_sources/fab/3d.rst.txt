@@ -1,0 +1,20 @@
+3D printing LPA parts
+===============================
+
+The purpose of this procedure is to describe steps for fabricating or commercially obtaining 3D printed parts for the LPA. 3D printed parts were created in SolidWorks and converted to g-code using ReplicatorG software. SolidWorks and .STL files for each part can be found in the Supplementary Files. Prints were made with black ABS plastic, 10% infill, 0.2 mm layer height, full support, and no raft.
+
+3D printing LPA parts yourself
+---------------------------------------
+Each LPA part can be 3D printed by converting the part’s corresponding .STL file to G-code using “slicing” software and using the print settings listed above.
+
+During printing, part warping at the edges was problematic due to the large profile of the objects. To counteract object warping, we found it helpful to print on a fresh kapton tape surface and without the use of a raft (lattice of ABS printed underneath the object). For the LED spacer in particular, we found it necessary to print the object on top of a thin layer of ABS cement. ABS cement is made by dissolving ABS plastic (we use discarded ABS parts) in 100% acetone until the solution has roughly the consistency of coffee creamer. Before starting the print, the solution is applied to the build surface with a swab in the area of the object’s perimeter and allow the acetone to evaporate. Using cement throughout the entire area of the object should be avoided, as it will be extremely difficult to remove the object when complete.
+
+The device LED sockets fit very snuggly within the LED spacer’s socket ports. The exact dimensions of the LED spacer’s socket ports are sensitive to the 3D printer’s build plate height which may need to be fine-tuned.
+
+Obtaining 3D Printed Parts from a commercial supplier
+-----------------------------------------------------------
+3D printed parts can be obtained commercially by providing the part’s corresponding .STL file and specifying print settings. We recommend two different options for commercial fabrication.
+
+More expensive option: Utilize a professional 3D printing service to print high quality and consistent LPA parts. We successfully trialed Xometry, which printed the four LPA parts and LED socket aligner for about $300 with the following options: fused deposition modelling, black ABS-M30, light infill.
+
+Less expensive option: Utilize a service, such as MakeXYZ, which will outsource the fabrication to independent 3D printer owners/hobbyists. Results will almost certainly depend on the 3D printer, but you can screen them for quality. We have not tested this option, but the cost is significantly less (about $120 for the four LPA parts and LED socket aligner).

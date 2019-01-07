@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Firmware programming &mdash; Light Plate Apparatus 0.9 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Firmware compiling" href="firmware_compiling.html" />
+    <link rel="prev" title="Firmware" href="index.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Light Plate Apparatus
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../FAQ/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../specifications/index.html">Specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fab/index.html">Fabrication and assembly</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Initializing a new device</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Firmware</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Firmware programming</a></li>
+<li class="toctree-l3"><a class="reference internal" href="firmware_compiling.html">Firmware compiling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../calibration_led.html">LED calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../calibration_time.html">LPA time step calibration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../using/index.html">Using the LPA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../links/videos.html">Video tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../links/papers.html">Papers which use LPAs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Light Plate Apparatus</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Initializing a new device</a> &raquo;</li>
+        
+          <li><a href="index.html">Firmware</a> &raquo;</li>
+        
+      <li>Firmware programming</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/initializing/firmware/firmware_programming.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="firmware-programming">
+<h1>Firmware programming<a class="headerlink" href="#firmware-programming" title="Permalink to this headline">¶</a></h1>
+<p><strong>Note: Windows 7 or later is required to install Atmel Studio.</strong></p>
+<ol class="arabic simple">
+<li>Installing Atmel Studio</li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>To obtain the link to download Atmel Studio, you need to have an account on the Atmel website. Go to <a class="reference external" href="https://secure.atmel.com/forms/secure/user-registration.aspx">https://secure.atmel.com/forms/secure/user-registration.aspx</a> and follow the instructions to set up an account.</li>
+<li>Go to <a class="reference external" href="http://www.atmel.com/tools/ATMELSTUDIO.aspx">http://www.atmel.com/tools/ATMELSTUDIO.aspx</a>. Scroll down the page, and click on “Atmel Studio 7.x (build xxx) web installer” to download the installer. If you are not logged in, the website may ask you to do so. If everything went correctly, you should now have the Atmel Studio installer on your computer.</li>
+<li>Run the installer. You might see a small window saying “Your license for xeam Visual Installer has expired”. This is an issue on Atmel’s end and should not concern the user. Click on Continue.</li>
+<li>Read and accept the End User License Agreement, and accept the defaults in the next windows. At the end, a confirmation window will appear. Click on “Install”. The installer will now download and install Atmel Studio. This should take around 10 minutes, depending on your connection and computer.</li>
+<li>When installation is complete, a confirmation window will appear. Leave the checkbox “Launch Atmel Studio” on and click on “Close”. This will test that Atmel Studio can be opened successfully.</li>
+<li>If everything is correct, the Atmel Studio window will now appear.</li>
+</ol>
+<div class="figure" id="id1" style="width: 100%">
+<a class="reference internal image-reference" href="../../_images/firmware_6.png"><img alt="../../_images/firmware_6.png" src="../../_images/firmware_6.png" style="width: 634.1px; height: 504.05px;" /></a>
+<p class="caption"><span class="caption-text">The picture shows the AVRISP mkII programmer selected under “Tool”, the “ATmega328” device selected under “Device”, and the “ISP” Interface selected under ISP. Everything below these options appears after clicking the “Apply” button.</span></p>
+</div>
+</div></blockquote>
+<p>2.      Programming the Device
+This procedure requires an Atmel microcontroller programmer, such as the the AVRISP mkII or the AVR Dragon. This procedure also requires the user to download the LPA firmware files from the Supplementary Files or the LPA website (<a class="reference external" href="http://rice-bioe.github.io/LPA-hardware">http://rice-bioe.github.io/LPA-hardware</a>).
+To program the firmware into the LPA’s microcontroller, follow these steps.</p>
+<ol class="loweralpha simple">
+<li>Make sure that the programmer is correctly connected to the LPA board via the programming connector, and to the PC via USB. Also make sure that the LPA board is connected to a power supply. If you are using the AVRISP mkII programmer, the programming connector is a black 6-pin female connector. This should be plugged into the LPA’s male programming connector such that the red edge of the programming wire points outwards, in the opposite direction of the SD card connector.</li>
+<li>On Atmel Studio, go to Tools -&gt; Device Programming. The “Device Programming” window will appear.</li>
+<li>Make sure that the appropriate tool is selected (e.g. AVRISP mkII). Also, select “ATmega328” under “Device” and “ISP” under “Interface”. Click on the “Apply” button. The window should look similar to Supplementary Fig. S13.</li>
+<li>Click on the “Read” button, next to the “Device signature” box, to the right of the “Apply” button from the previous step. If everything went correctly, the “Device signature” box should be filled, the “Target voltage” should be 3.3V, and no error messages should appear. If there is an error, try selecting ATmega328P under “Device” and repeating from the previous step. If you are still getting an error, close the window and repeat everything from step a. If the error persists, it is likely that the programming connector, microcontroller, and/or power regulator have been soldered incorrectly. Refer to the Supplementary Method on circuit board fabrication and assembly.</li>
+<li>This step is only necessary the first time a new device is programmed. On the “Device Programming” dialog, select “Fuses” from the list on the left. On the “fuse name/value” list that will open, make sure that the CKDIV8 box is disabled, the CKOUT box is enabled, and the SUT_CKSEL box is set to EXTXOSC_8MHZ_XX_1KCK_14CK_65MS. Click on the “Program” button below.</li>
+<li>Select “Production file” from the list on the left in the “Device Programming” dialog. Click on the “…” button located to the right of the “Program device from ELF production file” textbox. Locate file “firmware.elf” inside the “firmware” folder in the Supplementary Files. Click on “Open”.</li>
+<li>Make sure that the “Flash”, “Erase memory before programming”, and “Verify programmed content” checkboxes are activated, and click on the “Program” button. The messages “Erasing device… OK”, “Programming Flash…OK”, and “Verifying Flash…OK” should appear below.</li>
+</ol>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="firmware_compiling.html" class="btn btn-neutral float-right" title="Firmware compiling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Firmware" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Tabor Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
