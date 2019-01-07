@@ -16,6 +16,13 @@ Firmware programming
 
   f)	If everything is correct, the Atmel Studio window will now appear.
 
+
+  .. figure:: firmware_6.png
+     :scale: 85%
+     :figwidth: 100%
+
+     The picture shows the AVRISP mkII programmer selected under “Tool”, the “ATmega328” device selected under “Device”, and the “ISP” Interface selected under ISP. Everything below these options appears after clicking the “Apply” button.
+
 2.	Programming the Device
 This procedure requires an Atmel microcontroller programmer, such as the the AVRISP mkII or the AVR Dragon. This procedure also requires the user to download the LPA firmware files from the Supplementary Files or the LPA website (http://rice-bioe.github.io/LPA-hardware).
 To program the firmware into the LPA’s microcontroller, follow these steps.

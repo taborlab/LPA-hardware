@@ -23,10 +23,22 @@ The firmware uses the Arduino libraries to read from the SD card. In order to ha
 
   g)	Go back to the folder that you opened in step e. The file “core.a” contains the compiled Arduino libraries. Copy this file into the arduinoCore328 folder and rename it to libcore.a. The arduino library is now ready.
 
+
 2.	Downloading and Building the Firmware
 ------------------------------------------------
-  a.	The user first needs to obtain the source files. From a command line terminal run the following: git clone --recursive https://github.com/rice-bioe/LPA-hardware
-  This should create a folder called “LPA-hardware”.
+.. figure:: firmware_1.png
+  :scale: 45%
+  :figwidth: 100%
+
+  On the firmware project properties panel, the “Toolchain” option (left) has been selected, followed by “AVR/GNU Linker -> Libraries” (middle).
+  The only item in the “Library search path” list, “%HOMEPATH%\Documents\Atmel Studio\arduinoCore328”, has been selected.
+  The “Edit item” button is shown with a red arrow.
+
+  a.	The user first needs to obtain the source files. From a command line terminal run the following:
+
+      git clone --recursive https://github.com/rice-bioe/LPA-hardware.
+
+      This should create a folder called “LPA-hardware”.
 
   b.	Navigate to “LPA-hardware\firmware”. Open the file “firmware.atsln”. This will open the firmware project in Atmel Studio.
 
@@ -42,6 +54,22 @@ The firmware uses the Arduino libraries to read from the SD card. In order to ha
 
 3.	Troubleshooting Compilation
 -----------------------------------------
+.. figure:: firmware_2.png
+  :scale: 55%
+  :figwidth: 100%
+
+  On the firmware project properties panel, the “Toolchain” option (left) has been selected, followed by “AVR/GNU C Compiler -> Miscellaneous” (middle).
+  The figure shows the correct placement of the text “-include ../config.h” inside the “Other flags” text box.
+
+
+.. figure:: firmware_3.png
+  :scale: 55%
+  :figwidth: 100%
+
+  On the firmware project properties panel, the “Toolchain” option (left) has been selected, followed by “AVR/GNU C Compiler -> Directories” (middle).
+  The “Include Paths” list is shown, with the last five entries pointing to Arduino directories. The arrow points to the “Edit item” button.
+
+
 If step 2g fails, follow the steps below, one at a time, and try step 2g again.
 
   a)	Go to Project -> firmware Properties, or press Alt + F7. The project properties panel will open. Click on “Toolchain” on the left. Navigate to “AVR/GNU C Compiler -> Miscellaneous”. Check that “-include ../config.h” (without the quotation marks) is added to the “Other flags” textbox (Supplementary Fig. S9). Repeat the same for “AVR/GNU C++ Compiler -> Miscellaneous”.
@@ -59,6 +87,13 @@ If step 2g fails, follow the steps below, one at a time, and try step 2g again.
     v)	“{Arduino Installation folder}\hardware\arduino\avr\libraries\SPI”: Contains source files and headers of the SPI library, a module that is necessary to communicate with the SD card. Files included are “SPI.cpp” and “SPI.h”, among others.
 
 The default installation folder is “C:\Program Files (x86)\Arduino\”. If you installed Arduino to a different folder, change the entries in this list to reflect that. It is possible that in a version of Arduino different than 1.6.5 the individual folders have been moved within the Arduino installation folder. If the locations listed above are invalid, you should locate the corresponding folders that match the descriptions above. To modify an entry, select it from the list and click on the “Edit item” button (Supplementary Fig. S10).
+
+.. figure:: firmware_4.png
+   :scale: 55%
+   :figwidth: 100%
+
+   The Solution Explorer is found in the upper right part of the window. In this example, the file “SPI.cpp” has not been found, which is indicated by the yellow exclamation icon next to the file name.
+
 
 When you finish, go to “AVR/GNU C++ Compiler -> Directories” on the middle panel and repeat this step.
 

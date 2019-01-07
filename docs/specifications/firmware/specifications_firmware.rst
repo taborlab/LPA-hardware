@@ -17,6 +17,13 @@ In this section, we will describe the high-level behavior of the firmware main p
 States of the Firmware Program
 ---------------------------------------------
 
+.. figure:: states.png
+   :scale: 20%
+   :figwidth: 100%
+
+   In this diagram, rounded squares denote states, rounded squares with double edges denote terminal states, and arrows denote transitions. The circle labeled as START denotes the state of the program upon booting.
+
+
 The LPA will often need to respond differently to the same stimuli, especially under error conditions. This is best managed by modeling the system as a finite state machine, in which the device’s behavior is a function of both the inputs and the current state. In the firmware, the current state is contained in a single variable. Supplementary Table S4 enumerates the different states of the device, and Supplementary Fig. S14 shows the transition diagram between different states. Each pattern displayed by the status LEDs corresponds directly to each state (Supplementary Tables S3 and S4).
 
 TLC5941 Driver module

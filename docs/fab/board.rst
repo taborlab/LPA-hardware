@@ -1,3 +1,5 @@
+.. _board:
+
 Circuit board fabrication and assembly
 =========================================
 
@@ -23,6 +25,7 @@ Through-hole component soldering
 LED socket alignment and soldering is demonstrated in Supplementary Video S1. Briefly:
 
 1.	Use the 3D printed LED socket aligner (Supplementary Fig. S7) to make sure that the LED sockets are positioned and oriented evenly. Use tape to secure LED sockets in place.
+
 2.	Invert the circuit board and solder LED sockets to the circuit board using a soldering kit.
 
 Once all components are soldered, use a digital multimeter (DMM) to check the following: (a) there should be no connection between power and ground, (b) the ground pin on the power connector should be conducting with the ground pins on the microcontroller and each of the LED drivers, (c) the 3.3V output of the voltage regulator should be conducting with the power pins on the microcontroller and each of the LED drivers, (d) LED driver pins and associated PCB pads should conduct (good alignment can be tricky).
@@ -41,5 +44,5 @@ Once the circuit board components have been soldered and inspected, the device c
 2.	Use the molex terminal crimper to attach terminals to the wire, and insert the terminals into the female molex housing.
 3.	Strip and insert the other ends of the wire into the barrel jack connector, and screw down the terminals to keep the wires fixed.
 4.	Plug in the AC wall adapter and connect it to the power adapter you have just constructed (but not yet connected to the circuit board).
-5.	(Important) Make sure that power and ground are in the correct positions with a DMM. The positive terminal has a square pad on the back side of the PCB.
+5.	**Important**: Make sure that power and ground are in the correct positions with a DMM. The positive terminal has a square pad on the back side of the PCB.
 6.	Connect the power adapter to the circuit board. Use the back of your index finger to test whether any of the components are heating up. If the components remain cool, then the board has been built properly.
