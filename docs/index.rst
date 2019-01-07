@@ -38,6 +38,3 @@ Cite the LPA
 ----------------
 If you use the LPA in your research, please cite the following article:
   Gerhardt, et al. `An open-hardware platform for optogenetics and photobiology <https://www.nature.com/articles/srep35363>`_. *Scientific Reports* 6 (2016)
-
-
- :abbr:`LIFO (last-in, first-out)`.
