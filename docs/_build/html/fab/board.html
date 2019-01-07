@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Circuit board fabrication and assembly &mdash; Light Plate Apparatus 0.9 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3D printing LPA parts" href="3d.html" />
+    <link rel="prev" title="Fabrication and assembly" href="index.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Light Plate Apparatus
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../FAQ/faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../specifications/index.html">Specifications</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Fabrication and assembly</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Circuit board fabrication and assembly</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fabrication">1. Fabrication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-a-do-it-yourself-assembly">2 (option A). Do-it-yourself assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#through-hole-component-soldering">Through-hole component soldering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-b-commercial-assembly">2 (option B). Commercial assembly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#powering-the-circuit-board">3. Powering the circuit board</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="3d.html">3D printing LPA parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gasket.html">Laser cutting gaskets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="final.html">LPA final assembly</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../initializing/index.html">Initializing a new device</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/index.html">Using the LPA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">Contribute</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../links/videos.html">Video tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../links/papers.html">Papers which use LPAs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Light Plate Apparatus</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Fabrication and assembly</a> &raquo;</li>
+        
+      <li>Circuit board fabrication and assembly</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/fab/board.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="circuit-board-fabrication-and-assembly">
+<span id="board"></span><h1>Circuit board fabrication and assembly<a class="headerlink" href="#circuit-board-fabrication-and-assembly" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this procedure is describe the steps to assemble a functioning LPA circuit board from parts listed in Supplementary Table S1 using equipment listed in Supplementary Table S2. There are two major steps: 1) Fabrication of the unpopulated LPA Printed Circuit Board (PCB), and 2) Assembly, or soldering of the surface mounted and through-hole components. Step 1 is performed via a commercial supplier. For step 2, we have provided do-it-yourself and commercial protocols.</p>
+<div class="section" id="fabrication">
+<h2>1. Fabrication<a class="headerlink" href="#fabrication" title="Permalink to this headline">¶</a></h2>
+<p>The unpopulated LPA PCB can be ordered from a company by providing the six gerber (.gxx) files and one drill (.drl) file in the Supplementary Files. There are many companies that provide this service. Companies will manufacture PCBs at different costs per PCB depending on the order size. We have utilized OSH Park (Portland, OR), which has fabricated three LPA PCBs (minimum order) for $82.20. OSH Park does not perform PCB component assembly (see below).</p>
+</div>
+<div class="section" id="option-a-do-it-yourself-assembly">
+<h2>2 (option A). Do-it-yourself assembly<a class="headerlink" href="#option-a-do-it-yourself-assembly" title="Permalink to this headline">¶</a></h2>
+<p>Surface mounted component soldering:</p>
+<ol class="arabic simple">
+<li>Tape the printed circuit board (PCB) to a benchtop, and align and tape PCB stencil on top. Smear solder paste over the stencil.</li>
+<li>Peel the stencil up, leaving solder paste over electrical contacts.</li>
+<li>Use tweezers to place surface mount components, following the component placement diagram (Supplementary Files).</li>
+<li>Place the populated PCB into a toaster oven and adjust the oven temperature setting according to the following sequence: 150°C for 2 min; 180°C for 1 min; 200°C for 30 s; and 230°C until solder is melted (usually 1-1.5 min). Times indicate when to make the temperature setting adjustment, not when the oven temperature is reached.</li>
+<li>Open the oven door, pull out the rack and cool for 1 min before moving the board.</li>
+<li>Inspect the solder connections on the board for bridged or failed connections. Use the soldering kit to add or remove solder where necessary (an inspection microscope is helpful for this step).</li>
+</ol>
+</div>
+<div class="section" id="through-hole-component-soldering">
+<h2>Through-hole component soldering<a class="headerlink" href="#through-hole-component-soldering" title="Permalink to this headline">¶</a></h2>
+<p>LED socket alignment and soldering is demonstrated in Supplementary Video S1. Briefly:</p>
+<ol class="arabic simple">
+<li>Use the 3D printed LED socket aligner (Supplementary Fig. S7) to make sure that the LED sockets are positioned and oriented evenly. Use tape to secure LED sockets in place.</li>
+<li>Invert the circuit board and solder LED sockets to the circuit board using a soldering kit.</li>
+</ol>
+<p>Once all components are soldered, use a digital multimeter (DMM) to check the following: (a) there should be no connection between power and ground, (b) the ground pin on the power connector should be conducting with the ground pins on the microcontroller and each of the LED drivers, (c) the 3.3V output of the voltage regulator should be conducting with the power pins on the microcontroller and each of the LED drivers, (d) LED driver pins and associated PCB pads should conduct (good alignment can be tricky).</p>
+</div>
+<div class="section" id="option-b-commercial-assembly">
+<h2>2 (option B). Commercial assembly<a class="headerlink" href="#option-b-commercial-assembly" title="Permalink to this headline">¶</a></h2>
+<p>Many companies will assemble surface and through hole components. If you choose this option, you would typically have the same company fabricate and assemble the circuit board. Cost for these services reduces dramatically with order size. For example, Screaming Circuits (Canby, OR) has quoted us fabrication and assembly cost at approximately $950 for one or $1200 for ten boards.</p>
+<p>In addition to providing the information necessary for board fabrication (see above), a bill of materials (BOM) and component placement file must be provided (Supplementary Files). Companies will charge significantly more for performing assembly on two sides of the board. Because there are only two electrical components on the front layer of the LPA board (excluding LED sockets), we recommend only ordering assembly on the back layer. The male molex connector and reset switch can easily be soldered by hand. In any case, due to the need for the custom LED socket aligner tool, we do not recommend having a company solder the LED sockets. This should be done by hand as described above.</p>
+</div>
+<div class="section" id="powering-the-circuit-board">
+<h2>3. Powering the circuit board<a class="headerlink" href="#powering-the-circuit-board" title="Permalink to this headline">¶</a></h2>
+<p>Once the circuit board components have been soldered and inspected, the device can be powered on:</p>
+<ol class="arabic simple">
+<li>Construct the barrel-jack power adapter by stripping two ~8 in lengths of multicore wire.</li>
+<li>Use the molex terminal crimper to attach terminals to the wire, and insert the terminals into the female molex housing.</li>
+<li>Strip and insert the other ends of the wire into the barrel jack connector, and screw down the terminals to keep the wires fixed.</li>
+<li>Plug in the AC wall adapter and connect it to the power adapter you have just constructed (but not yet connected to the circuit board).</li>
+<li><strong>Important</strong>: Make sure that power and ground are in the correct positions with a DMM. The positive terminal has a square pad on the back side of the PCB.</li>
+<li>Connect the power adapter to the circuit board. Use the back of your index finger to test whether any of the components are heating up. If the components remain cool, then the board has been built properly.</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="3d.html" class="btn btn-neutral float-right" title="3D printing LPA parts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Fabrication and assembly" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Tabor Lab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
