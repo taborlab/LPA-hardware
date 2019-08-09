@@ -6,7 +6,7 @@ The LPA is a device capable of illuminating each well of a 24-well plate with tw
 
 This repository contains source files, needed to modify the LPA's design. To obtain the minimum necessary files for building and using an LPA, click [here](https://github.com/taborlab/LPA-hardware/releases/download/v1.1/lpa.zip).
 
-If you use the LPA in your research, please cite [Gerhardt, et al. "An open-hardware platform for optogenetics and photobiology." Scientific Reports 6 (2016)](https://www.nature.com/articles/srep35363).
+If you use the LPA in your research, please cite [Gerhardt K.P., et al. "An open-hardware platform for optogenetics and photobiology." Scientific Reports 6 (2016)](https://www.nature.com/articles/srep35363) and/or [Gerhardt K.P., Castillo-Hair S.M., and Tabor J.T. "DIY optogenetics: Building, programming, and using the Light Plate Apparatus." Methods Enzymol. (2019)](https://www.sciencedirect.com/science/article/pii/S0076687919301338)
 
 
 ### Documentation
