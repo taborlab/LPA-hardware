@@ -14,9 +14,10 @@ If you use the LPA in your research, please cite [Gerhardt K.P., et al. "An open
 The documentation website for the LPA can be found in http://taborlab.github.io/LPA-hardware/.
 
 ### Contents:
+* BOM: Bill of materials for circuit board and chassis.
 * CAD Files: Design files for the different parts of the LPA. This folder contains:
   * 3D Printed Parts: Models of the structural 3D-printed elements of the LPA, in SolidWorks format.
   * Circuit Board: Schematics and layout of the electronic board, in KiCAD format.
   * Gaskets: Diagrams of the rubber gaskets, in DXF (AutoCAD) format.
 * Firmware: Source files of the microcontroller's firmware in C++, organized as an Atmel Studio project.
-* Image analysis script: Scripts for imager-based LED calibration, in matlab format, and examples.
+* Calibration: Image analysis script for imager-based LED calibration, in matlab format, and examples.
